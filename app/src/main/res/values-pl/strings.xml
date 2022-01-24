@@ -1,6 +1,5 @@
 <resources>
   <string name="app_name">PersonalPass</string>
-
   <!-- ONBOARDING -->
-  <string name="onboard_title_first_screen">Welcome to PersonalPass</string>
+  <string name="onboard_title_first_screen">Witamy w PersonalPass</string>
 </resources>
