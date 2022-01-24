@@ -1,8 +1,10 @@
-package org.dominik.pass;
+package org.dominik.pass.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+
+import org.dominik.pass.R;
 
 public class MainActivity extends AppCompatActivity {
 
