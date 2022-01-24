@@ -4,15 +4,48 @@
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  tools:context=".MainActivity">
+  android:background="@color/white_dark"
+  tools:context=".activities.MainActivity">
 
-  <TextView
+
+  <androidx.viewpager2.widget.ViewPager2
+    android:id="@+id/onboardViewPager"
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    android:layout_marginBottom="32dp"
+    android:foregroundGravity="center"
+    app:layout_constraintBottom_toTopOf="@+id/worm_dots_indicator"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent" />
+
+  <com.tbuonomo.viewpagerdotsindicator.WormDotsIndicator
+    android:id="@+id/worm_dots_indicator"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:text="Hello World!"
+    android:layout_marginBottom="24dp"
+    app:dotsColor="@color/grey"
+    app:dotsCornerRadius="8dp"
+    app:dotsSize="16dp"
+    app:dotsSpacing="4dp"
+    app:dotsStrokeColor="@color/grey"
+    app:dotsStrokeWidth="2dp"
     app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintLeft_toLeftOf="parent"
-    app:layout_constraintRight_toRightOf="parent"
-    app:layout_constraintTop_toTopOf="parent" />
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintHorizontal_bias="0.497"
+    app:layout_constraintStart_toStartOf="parent" />
+
+  <!--<TextView
+    android:id="@+id/onboardFirstScreenTitle"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:fontFamily="@font/anton"
+    android:textAlignment="center"
+    android:textSize="24sp"
+    android:textStyle="bold"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent" />-->
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
