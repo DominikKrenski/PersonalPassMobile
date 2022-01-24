@@ -8,4 +8,8 @@
   <string name="onboard_msg_first">PersonalPass przechowuje i synchronizuje Twoje hasła i prywatne dane na wszystkich urządzeniach.</string>
   <string name="onboard_msg_second">Musisz jedynie zapamiętać jedno główne hasło, żeby mieć dostęp do każdej witryny, z której korzystasz.</string>
   <string name="onboard_msg_third">Twój schowek jest zabezpieczony za pomocą światowej klasy rozwiązań. Nawet my nie mamy dostępu do Twoich danych.</string>
+
+  <!-- BUTTONS -->
+  <string name="create_account_btn">UTWÓRZ MOJE KONTO</string>
+  <string name="sign_in_btn">ZALOGUJ SIĘ</string>
 </resources>

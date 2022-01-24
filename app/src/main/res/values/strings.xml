@@ -9,4 +9,8 @@
   <string name="onboard_msg_first">PersonalPass stores and syncs your passwords and personal data across all the devices in your life.</string>
   <string name="onboard_msg_second">You only need to remember one master password to access every website you use.</string>
   <string name="onboard_msg_third">Your vault is protected with world-class security. It\'s secure, not even we can access your passwords.</string>
+
+  <!-- BUTTONS -->
+  <string name="create_account_btn">CREATE MY ACCOUNT</string>
+  <string name="sign_in_btn">SING IN INSTEAD</string>
 </resources>
