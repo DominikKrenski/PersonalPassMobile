@@ -2,9 +2,12 @@ package org.dominik.pass.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager2.widget.ViewPager2;
+import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback;
 
 import android.os.Bundle;
+import android.view.View;
 
+import com.google.android.material.button.MaterialButton;
 import com.tbuonomo.viewpagerdotsindicator.WormDotsIndicator;
 
 import org.dominik.pass.R;
@@ -24,11 +27,27 @@ public class MainActivity extends AppCompatActivity {
 
     ViewPager2 viewPager = findViewById(R.id.onboardViewPager);
     WormDotsIndicator indicator = findViewById(R.id.worm_dots_indicator);
+    MaterialButton createAccountBtn = findViewById(R.id.create_account_btn);
+    MaterialButton signinBtn = findViewById(R.id.signin_btn);
 
     setOnboardItems();
 
     viewPager.setAdapter(onboardAdapter);
     indicator.setViewPager2(viewPager);
+
+    viewPager.registerOnPageChangeCallback(new OnPageChangeCallback() {
+      @Override
+      public void onPageSelected(int position) {
+        super.onPageSelected(position);
+        if (position == 2) {
+          createAccountBtn.setVisibility(View.VISIBLE);
+          signinBtn.setVisibility(View.VISIBLE);
+        } else {
+          createAccountBtn.setVisibility(View.INVISIBLE);
+          signinBtn.setVisibility(View.INVISIBLE);
+        }
+      }
+    });
   }
 
   private void setOnboardItems() {
