@@ -12,12 +12,15 @@ public final class StringUtils {
 
   private StringUtils() {}
 
-  public SpannableString prepareOnBoardingTitle(Context ctx) {
-    String title = ctx.getResources().getString(R.string.onboard_title_first_screen);
-    int personalIdx = title.indexOf("Personal");
-    int passIdx = title.indexOf("Pass");
+  public SpannableString prepareAppName(Context ctx, String text) {
+    int personalIdx = text.indexOf("Personal");
+    int passIdx = text.indexOf("Pass");
 
-    SpannableString spanString = new SpannableString(title);
+    SpannableString spanString = new SpannableString(text);
+
+    if (personalIdx == -1 || passIdx == -1)
+      return spanString;
+
     spanString.setSpan(new ForegroundColorSpan(ctx.getResources().getColor(R.color.grey, null)), personalIdx, personalIdx + 8, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
     spanString.setSpan(new ForegroundColorSpan(ctx.getResources().getColor(R.color.red, null)), passIdx, passIdx + 4, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
     return spanString;
