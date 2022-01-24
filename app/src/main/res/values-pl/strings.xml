@@ -1,5 +1,11 @@
 <resources>
   <string name="app_name">PersonalPass</string>
   <!-- ONBOARDING -->
-  <string name="onboard_title_first_screen">Witamy w PersonalPass</string>
+  <string name="onboard_image_view_desc">Onboard image</string>
+  <string name="onboard_title_first">Witamy w PersonalPass</string>
+  <string name="onboard_title_second">Dość zapominania</string>
+  <string name="onboard_title_third">Godny zaufania i bezpieczny</string>
+  <string name="onboard_msg_first">PersonalPass przechowuje i synchronizuje Twoje hasła i prywatne dane na wszystkich urządzeniach.</string>
+  <string name="onboard_msg_second">Musisz jedynie zapamiętać jedno główne hasło, żeby mieć dostęp do każdej witryny, z której korzystasz.</string>
+  <string name="onboard_msg_third">Twój schowek jest zabezpieczony za pomocą światowej klasy rozwiązań. Nawet my nie mamy dostępu do Twoich danych.</string>
 </resources>

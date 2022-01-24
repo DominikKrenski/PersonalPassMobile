@@ -2,5 +2,11 @@
   <string name="app_name">PersonalPass</string>
 
   <!-- ONBOARDING -->
-  <string name="onboard_title_first_screen">Welcome to PersonalPass</string>
+  <string name="onboard_image_view_desc">Onboard image</string>
+  <string name="onboard_title_first">Welcome to PersonalPass</string>
+  <string name="onboard_title_second">Never forget again</string>
+  <string name="onboard_title_third">Trusted and secure</string>
+  <string name="onboard_msg_first">PersonalPass stores and syncs your passwords and personal data across all the devices in your life.</string>
+  <string name="onboard_msg_second">You only need to remember one master password to access every website you use.</string>
+  <string name="onboard_msg_third">Your vault is protected with world-class security. It\'s secure, not even we can access your passwords.</string>
 </resources>
