@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager2.widget.ViewPager2;
 import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
@@ -27,8 +28,8 @@ public class MainActivity extends AppCompatActivity {
 
     ViewPager2 viewPager = findViewById(R.id.onboardViewPager);
     WormDotsIndicator indicator = findViewById(R.id.worm_dots_indicator);
-    MaterialButton createAccountBtn = findViewById(R.id.create_account_btn);
     MaterialButton signinBtn = findViewById(R.id.signin_btn);
+    MaterialButton signupBtn = findViewById(R.id.signup_btn);
 
     setOnboardItems();
 
@@ -40,13 +41,18 @@ public class MainActivity extends AppCompatActivity {
       public void onPageSelected(int position) {
         super.onPageSelected(position);
         if (position == 2) {
-          createAccountBtn.setVisibility(View.VISIBLE);
+          signupBtn.setVisibility(View.VISIBLE);
           signinBtn.setVisibility(View.VISIBLE);
         } else {
-          createAccountBtn.setVisibility(View.INVISIBLE);
+          signupBtn.setVisibility(View.INVISIBLE);
           signinBtn.setVisibility(View.INVISIBLE);
         }
       }
+    });
+
+    signupBtn.setOnClickListener(v -> {
+      Intent intent = new Intent(this, SignupActivity.class);
+      startActivity(intent);
     });
   }
 
