@@ -25,4 +25,5 @@
   <!-- ERROR MESSAGES -->
   <string name="email_required_msg">Email is required</string>
   <string name="email_pattern_msg">Email is not valid</string>
+  <string name="email_in_use">Email is already in use</string>
 </resources>
