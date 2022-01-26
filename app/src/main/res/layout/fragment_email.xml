@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:paddingLeft="50dp"
+  android:paddingRight="50dp"
+  android:background="@color/white_dark"
+  tools:context=".fragments.EmailFragment">
+
+  <androidx.appcompat.widget.LinearLayoutCompat
+    android:id="@+id/linearLayoutCompat"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="20dp"
+    android:orientation="horizontal"
+    android:padding="10dp"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent">
+
+    <ImageView
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_marginLeft="5dp"
+      android:layout_marginRight="5dp"
+      android:layout_weight="0.2"
+      android:background="@drawable/ic_indicator_line_active"
+      android:contentDescription="@string/indicator_active_desc" />
+
+    <ImageView
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_marginLeft="5dp"
+      android:layout_marginRight="5dp"
+      android:layout_weight="0.2"
+      android:background="@drawable/ic_indicator_line_inactive"
+      android:contentDescription="@string/indicator_inactive_desc" />
+
+    <ImageView
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_marginLeft="5dp"
+      android:layout_marginRight="5dp"
+      android:layout_weight="0.2"
+      android:background="@drawable/ic_indicator_line_inactive"
+      android:contentDescription="@string/indicator_inactive_desc" />
+
+    <ImageView
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_marginLeft="5dp"
+      android:layout_marginRight="5dp"
+      android:layout_weight="0.2"
+      android:background="@drawable/ic_indicator_line_inactive"
+      android:contentDescription="@string/indicator_inactive_desc" />
+
+  </androidx.appcompat.widget.LinearLayoutCompat>
+
+  <TextView
+    android:id="@+id/email_title"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="20dp"
+    android:textSize="25sp"
+    android:textStyle="bold"
+    android:text="@string/email_title"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/linearLayoutCompat" />
+
+  <com.google.android.material.textfield.TextInputLayout
+    android:id="@+id/email_input"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="5dp"
+    android:hint="@string/email_label"
+    android:textColorHint="@color/grey"
+    app:errorEnabled="true"
+    app:errorTextColor="@color/red"
+    app:hintTextColor="@color/red"
+    app:boxBackgroundColor="@color/white_dark"
+    app:boxStrokeColor="@color/grey"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/email_title">
+
+    <com.google.android.material.textfield.TextInputEditText
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:paddingBottom="3dp"
+      android:textColor="@color/black" />
+  </com.google.android.material.textfield.TextInputLayout>
+
+  <com.google.android.material.button.MaterialButton
+    android:id="@+id/email_signup_button"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="100dp"
+    style="@style/Widget.MaterialComponents.Button"
+    android:backgroundTint="@color/red"
+    app:cornerRadius="12dp"
+    android:paddingLeft="70dp"
+    android:paddingRight="70dp"
+    android:text="@string/create_account_btn"
+    android:textColor="@color/white"
+    android:textSize="15sp"
+    app:rippleColor="@color/white"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/email_input" />
+
+  <com.google.android.material.button.MaterialButton
+    style="@style/Widget.MaterialComponents.Button.TextButton"
+    android:id="@+id/email_signin_button"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="@string/sign_in_btn"
+    android:textColor="@color/black"
+    android:textSize="12sp"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/email_signup_button"
+    app:layout_constraintVertical_bias="0.0"
+    app:rippleColor="@color/grey" />
+</androidx.constraintlayout.widget.ConstraintLayout>
