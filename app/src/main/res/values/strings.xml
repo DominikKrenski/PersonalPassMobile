@@ -10,7 +10,19 @@
   <string name="onboard_msg_second">You only need to remember one master password to access every website you use.</string>
   <string name="onboard_msg_third">Your vault is protected with world-class security. It\'s secure, not even we can access your passwords.</string>
 
+  <!-- EMAIL FRAGMENT -->
+  <string name="email_title">Let\'s get started!</string>
+  <string name="email_label">Email address</string>
+
+  <!-- INDICATOR DESCRIPTION -->
+  <string name="indicator_active_desc">Active registration page</string>
+  <string name="indicator_inactive_desc">Inactive registration page</string>
+
   <!-- BUTTONS -->
   <string name="create_account_btn">CREATE MY ACCOUNT</string>
   <string name="sign_in_btn">SING IN INSTEAD</string>
+
+  <!-- ERROR MESSAGES -->
+  <string name="email_required_msg">Email is required</string>
+  <string name="email_pattern_msg">Email is not valid</string>
 </resources>
