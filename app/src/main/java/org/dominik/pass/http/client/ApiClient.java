@@ -7,7 +7,8 @@ import retrofit2.Retrofit;
 import retrofit2.converter.jackson.JacksonConverterFactory;
 
 public final class ApiClient {
-  private static final String BASE_URL = "https://10.0.2.2:443/api/";
+  //private static final String BASE_URL = "https://10.0.2.2:443/api/";
+  private static final String BASE_URL = "https://192.168.0.17/api/";
   private static Retrofit INSTANCE;
 
   private ApiClient() {}
