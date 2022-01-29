@@ -20,4 +20,5 @@
   <color name="secure_nav_clicked">#20303b</color>
   <color name="secure_nav_hover">#5c6a74</color>
   <color name="secure_nav_color">#a6b9c6</color>
+  <color name="grey_transparent">#1a2f424b</color>
 </resources>
