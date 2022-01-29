@@ -2,8 +2,8 @@ package org.dominik.pass.fragments;
 
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
 import org.dominik.pass.R;
@@ -25,6 +26,7 @@ import org.dominik.pass.utils.Validator;
 
 import java.io.IOException;
 import java.net.SocketTimeoutException;
+import java.util.Arrays;
 import java.util.Locale;
 import java.util.Objects;
 
@@ -34,9 +36,11 @@ import retrofit2.Response;
 
 public class EmailFragment extends Fragment {
   private static final String TAG = "EMAIL_FRAGMENT";
+  private static final String EMAIL = "email_address";
 
   private View view;
-  private TextInputLayout inputLayout;
+  private TextInputLayout emailInputLayout;
+  private TextInputEditText emailInput;
   private PassService passService;
 
   public EmailFragment() { }
@@ -54,27 +58,25 @@ public class EmailFragment extends Fragment {
 
     MaterialButton signupBtn = view.findViewById(R.id.email_signup_button);
     MaterialButton signinBtn = view.findViewById(R.id.email_signin_button);
-    inputLayout = view.findViewById(R.id.email_input);
+    emailInputLayout = view.findViewById(R.id.email_input_layout);
+    emailInput = view.findViewById(R.id.email_input);
 
     passService = ApiClient.getInstance().create(PassService.class);
 
     Validator validator = Validator.getInstance();
 
-    if (savedInstanceState != null)
-      Objects.requireNonNull(inputLayout.getEditText()).setText(savedInstanceState.getString("email"));
-
     signupBtn.setOnClickListener(v -> {
-      String email = Objects.requireNonNull(inputLayout.getEditText()).getText().toString().trim();
+      String email = Objects.requireNonNull(emailInput.getText()).toString();
 
       // check if email is not empty
-      if (!validator.required(email)) {
-        inputLayout.setError(view.getResources().getString(R.string.email_required_msg));
+      if (!validator.notBlank(email)) {
+        emailInputLayout.setError(view.getResources().getString(R.string.email_required_msg));
         return;
       }
 
       // check if email is valid
       if (!validator.email(email)) {
-        inputLayout.setError(view.getResources().getString(R.string.email_pattern_msg));
+        emailInputLayout.setError(view.getResources().getString(R.string.email_pattern_msg));
         return;
       }
 
@@ -89,14 +91,6 @@ public class EmailFragment extends Fragment {
     return view;
   }
 
-  @Override
-  public void onSaveInstanceState(@NonNull Bundle outState) {
-    super.onSaveInstanceState(outState);
-
-    String email = Objects.requireNonNull(inputLayout.getEditText()).getText().toString();
-    outState.putString("email", email);
-  }
-
   private void getAuthInfo(String email) {
     Call<AuthDTO> call = passService.getAuthInfo(new EmailDTO(email.toLowerCase(Locale.ROOT)));
     call.enqueue(new Callback<AuthDTO>() {
@@ -106,15 +100,23 @@ public class EmailFragment extends Fragment {
           if (response.body() != null) {
             // salt has been found, it means that account already exists
             Log.d(TAG, response.body().toString());
-            Toast.makeText(view.getContext(), view.getResources().getString(R.string.email_in_use), Toast.LENGTH_LONG).show();
+            emailInputLayout.setError(view.getResources().getString(R.string.email_in_use));
           }
         } else {
           if (response.code() == 404) {
             // salt has not been found, it means that given email can be used
-            //TODO go to the next screen
+            Bundle args = new Bundle();
+            args.putString(EMAIL, email);
+
+            FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
+            transaction.setReorderingAllowed(true);
+            transaction.addToBackStack(null);
+            transaction.replace(R.id.signup_fragment_container, PasswordFragment.class, args);
+            transaction.commit();
           } else {
             ApiError apiError = ErrorConverter.getInstance().parseError(response);
-            Log.d(TAG, apiError.toString());
+            Log.e(TAG, apiError.toString());
+            Toast.makeText(view.getContext(), view.getContext().getResources().getString(R.string.generic_error), Toast.LENGTH_LONG).show();
           }
         }
       }
@@ -122,14 +124,18 @@ public class EmailFragment extends Fragment {
       @Override
       public void onFailure(Call<AuthDTO> call, Throwable error) {
         if (error instanceof SocketTimeoutException) {
-          Log.d(TAG, "CONNECTION TIMEOUT");
+          Log.e(TAG, Arrays.toString(error.getStackTrace()));
+          Toast.makeText(view.getContext(), view.getContext().getResources().getString(R.string.connection_timeout), Toast.LENGTH_LONG).show();
         } else if (error instanceof IOException) {
-          Log.d(TAG, "TIMEOUT");
+          Log.e(TAG, Arrays.toString(error.getStackTrace()));
+          Toast.makeText(view.getContext(), view.getContext().getResources().getString(R.string.read_timeout), Toast.LENGTH_LONG).show();
         } else {
           if (call.isCanceled()) {
-            Log.d(TAG, "REQUEST WAS CANCELLED BY THE USER");
+            Log.e(TAG, Arrays.toString(error.getStackTrace()));
+            Toast.makeText(view.getContext(), view.getContext().getResources().getString(R.string.request_cancelled), Toast.LENGTH_LONG).show();
           } else {
-            Log.d(TAG, "GENERIC ERROR");
+            Log.e(TAG, Arrays.toString(error.getStackTrace()));
+            Toast.makeText(view.getContext(), view.getContext().getResources().getString(R.string.generic_error), Toast.LENGTH_LONG).show();
           }
         }
       }
