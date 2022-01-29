@@ -14,6 +14,18 @@
   <string name="email_title">Let\'s get started!</string>
   <string name="email_label">Email address</string>
 
+  <!-- PASSWORD FRAGMENT -->
+  <string name="password_title">Now we\'ll create your master password</string>
+  <string name="password_subtitle">Pick something you don\'t use elsewhere. You can\'t reset it, so make it memorable!</string>
+  <string name="password_label">Master Password</string>
+  <string name="password_length">At least 12 characters long</string>
+  <string name="password_number">At least 1 number</string>
+  <string name="password_lowercase">At least 1 lowercase letter</string>
+  <string name="password_uppercase">At least 1 uppercase letter</string>
+  <string name="password_email">Not your email</string>
+  <string name="password_confirm_label">Confirm master password</string>
+  <string name="password_hint_label">Password hint (optional)</string>
+
   <!-- INDICATOR DESCRIPTION -->
   <string name="indicator_active_desc">Active registration page</string>
   <string name="indicator_inactive_desc">Inactive registration page</string>
@@ -21,9 +33,16 @@
   <!-- BUTTONS -->
   <string name="create_account_btn">CREATE MY ACCOUNT</string>
   <string name="sign_in_btn">SING IN INSTEAD</string>
+  <string name="password_button">SET PASSWORD</string>
 
   <!-- ERROR MESSAGES -->
   <string name="email_required_msg">Email is required</string>
   <string name="email_pattern_msg">Email is not valid</string>
   <string name="email_in_use">Email is already in use</string>
+  <string name="request_cancelled">Request has been canceled.</string>
+  <string name="generic_error">An unknown error occurred. Please, try later.</string>
+  <string name="connection_timeout">Could not establish connection. Please, try later.</string>
+  <string name="read_timeout">Could not retrieve response from server. Please, try later.</string>
+  <string name="passwords_not_equal">Passwords do not match.</string>
+  <string name="password_hint_max_length">Hint can be at most 255 characters long.</string>
 </resources>

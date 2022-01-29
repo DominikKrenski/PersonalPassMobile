@@ -13,6 +13,18 @@
   <string name="email_title">Zaczynamy!</string>
   <string name="email_label">Email address</string>
 
+  <!-- PASSWORD FRAGMENT -->
+  <string name="password_title">Teraz utworzymy Twoje główne hasło</string>
+  <string name="password_subtitle">Wybierz hasło, którego nie używasz w innym miejscu. Nie możesz go zresetować, więc dobrze je zapamiętaj!</string>
+  <string name="password_label">Główne hasło</string>
+  <string name="password_length">Co najmniej 12 znaków</string>
+  <string name="password_number">Co najmniej 1 liczba</string>
+  <string name="password_lowercase">Co najmniej 1 mała litera</string>
+  <string name="password_uppercase">Co najmniej 1 duża litera</string>
+  <string name="password_email">Nie Twój adres email</string>
+  <string name="password_confirm_label">Potwierdź główne hasło</string>
+  <string name="password_hint_label">Podpowiedź (opcjonalne)</string>
+
   <!-- INDICATOR DESCRIPTION -->
   <string name="indicator_active_desc">Aktywna strona rejestracji</string>
   <string name="indicator_inactive_desc">Nieaktywna strona rejestracji</string>
@@ -20,9 +32,16 @@
   <!-- BUTTONS -->
   <string name="create_account_btn">UTWÓRZ MOJE KONTO</string>
   <string name="sign_in_btn">ZALOGUJ SIĘ</string>
+  <string name="password_button">USTAW HASŁO</string>
 
   <!-- ERROR MESSAGES -->
   <string name="email_required_msg">Email jest wymagany</string>
   <string name="email_pattern_msg">Email nie jest poprawny</string>
   <string name="email_in_use">Adres email jest już w użyciu</string>
+  <string name="request_cancelled">Żądanie zostało anulowane.</string>
+  <string name="generic_error">Wystąpił nieznany błąd. Prosimy spróbować ponownie później.</string>
+  <string name="connection_timeout">Nie można nawiązać połączenia. Prosimy spróbować ponownie później.</string>
+  <string name="read_timeout">Nie otrzymano odpowiedzi z serwera. Prosimy spróbować ponownie później.</string>
+  <string name="passwords_not_equal">Hasła nie są jednakowe.</string>
+  <string name="password_hint_max_length">Wskazówka może zawierać co najwyżej 255 znaków.</string>
 </resources>
