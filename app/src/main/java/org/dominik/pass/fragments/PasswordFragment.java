@@ -3,6 +3,7 @@ package org.dominik.pass.fragments;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -19,13 +20,16 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
 import org.dominik.pass.R;
+import org.dominik.pass.http.dto.RegistrationDataDTO;
 import org.dominik.pass.utils.Validator;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 public class PasswordFragment extends Fragment {
   private static final String TAG = "PASSWORD_FRAGMENT";
   private static final String EMAIL = "email_address";
+  private static final String REGISTRATION_DATA = "registration_data";
 
   private String email;
 
@@ -94,16 +98,7 @@ public class PasswordFragment extends Fragment {
 
     MaterialButton passwordButton = view.findViewById(R.id.password_button);
 
-    passwordButton.setOnClickListener(v -> {
-      boolean passwordValid = performPasswordValidation(passwordInput.getText());
-      boolean passwordConfirmValid = performPasswordConfirmValidation(passwordInput.getText(), passwordConfirmInput.getText());
-      boolean hintValid = performHintValidation(passwordHintInput.getText());
-
-      if (!passwordValid || !passwordConfirmValid || !hintValid)
-        return;
-
-      //TODO go to the next screen
-    });
+    passwordButton.setOnClickListener(this::onClick);
 
 
     passwordInput.setOnFocusChangeListener((view, hasFocus) -> {
@@ -168,5 +163,31 @@ public class PasswordFragment extends Fragment {
       passwordHintLayout.setError(view.getResources().getString(R.string.password_hint_max_length));
 
     return valid;
+  }
+
+  private void onClick(View v) {
+    boolean passwordValid = performPasswordValidation(passwordInput.getText());
+    boolean passwordConfirmValid = performPasswordConfirmValidation(passwordInput.getText(), passwordConfirmInput.getText());
+    boolean hintValid = performHintValidation(passwordHintInput.getText());
+
+    if (!passwordValid || !passwordConfirmValid || !hintValid)
+      return;
+
+    // go to the finish screen
+    RegistrationDataDTO dto = new RegistrationDataDTO(
+      email,
+      Objects.requireNonNull(passwordInput.getText()).toString(),
+      null,
+      Objects.requireNonNull(passwordHintInput.getText()).toString()
+    );
+
+    Bundle args = new Bundle();
+    args.putSerializable(REGISTRATION_DATA, (Serializable) dto);
+
+    FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
+    transaction.setReorderingAllowed(true);
+    transaction.addToBackStack(null);
+    transaction.replace(R.id.signup_fragment_container, FinishFragment.class, args);
+    transaction.commit();
   }
 }
