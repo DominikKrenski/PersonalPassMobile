@@ -14,17 +14,32 @@ import com.tbuonomo.viewpagerdotsindicator.WormDotsIndicator;
 import org.dominik.pass.R;
 import org.dominik.pass.adapters.OnboardAdapter;
 import org.dominik.pass.models.OnboardItem;
+import org.dominik.pass.utils.SharedPrefs;
 
 import java.util.LinkedList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class LaunchActivity extends AppCompatActivity {
+  public static final String FRAGMENT_TYPE = "fragment_type";
+  private static final String FIRST_LAUNCH = "first_launch";
+
   private OnboardAdapter onboardAdapter;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_main);
+    setContentView(R.layout.activity_launch);
+
+    boolean firstLaunch = SharedPrefs.getInstance().readBoolean(this, FIRST_LAUNCH, true);
+
+    if (firstLaunch) {
+      SharedPrefs.getInstance().writeBoolean(this, FIRST_LAUNCH, false);
+    } else {
+      Intent intent = new Intent(this, AuthActivity.class);
+      intent.putExtra(FRAGMENT_TYPE, "signin");
+      startActivity(intent);
+
+    }
 
     ViewPager2 viewPager = findViewById(R.id.onboardViewPager);
     WormDotsIndicator indicator = findViewById(R.id.worm_dots_indicator);
@@ -51,7 +66,14 @@ public class MainActivity extends AppCompatActivity {
     });
 
     signupBtn.setOnClickListener(v -> {
-      Intent intent = new Intent(this, SignupActivity.class);
+      Intent intent = new Intent(this, AuthActivity.class);
+      intent.putExtra(FRAGMENT_TYPE, "signup");
+      startActivity(intent);
+    });
+
+    signinBtn.setOnClickListener(v -> {
+      Intent intent = new Intent(this, AuthActivity.class);
+      intent.putExtra(FRAGMENT_TYPE, "signin");
       startActivity(intent);
     });
   }
