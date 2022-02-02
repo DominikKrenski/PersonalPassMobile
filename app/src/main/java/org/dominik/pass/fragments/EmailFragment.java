@@ -30,9 +30,9 @@ import java.util.Arrays;
 import java.util.Locale;
 import java.util.Objects;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.schedulers.Schedulers;
+import retrofit2.HttpException;
 
 public class EmailFragment extends Fragment {
   private static final String TAG = "EMAIL_FRAGMENT";
@@ -85,25 +85,33 @@ public class EmailFragment extends Fragment {
     });
 
     signinBtn.setOnClickListener(v -> {
-      //TODO implement method to open new activity
+      FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
+      transaction.setReorderingAllowed(true);
+      transaction.addToBackStack(null);
+      transaction.replace(R.id.auth_fragment_container, LoginFragment.class, null);
+      transaction.commit();
     });
 
     return view;
   }
 
   private void getAuthInfo(String email) {
-    Call<AuthDTO> call = passService.getAuthInfo(new EmailDTO(email.toLowerCase(Locale.ROOT)));
-    call.enqueue(new Callback<AuthDTO>() {
-      @Override
-      public void onResponse(Call<AuthDTO> call, Response<AuthDTO> response) {
-        if (response.isSuccessful()) {
-          if (response.body() != null) {
-            // salt has been found, it means that account already exists
-            Log.d(TAG, response.body().toString());
-            emailInputLayout.setError(view.getResources().getString(R.string.email_in_use));
-          }
-        } else {
-          if (response.code() == 404) {
+    passService
+      .getAuthInfo(new EmailDTO(email.toLowerCase(Locale.ROOT)))
+      .subscribeOn(Schedulers.computation())
+      .observeOn(AndroidSchedulers.mainThread())
+      .subscribe(
+        response -> {
+        // salt has been found, it means that account already exists
+        Log.d(TAG, response.toString());
+        emailInputLayout.setError(view.getResources().getString(R.string.email_in_use));
+      },
+        err -> {
+        if (err instanceof HttpException) {
+          if (((HttpException) err).code() == 404) {
+            ApiError apiError = ErrorConverter.getInstance().parseError(Objects.requireNonNull(((HttpException) err).response()));
+            Log.d(TAG, apiError.toString());
+
             // salt has not been found, it means that given email can be used
             Bundle args = new Bundle();
             args.putString(EMAIL, email);
@@ -111,34 +119,20 @@ public class EmailFragment extends Fragment {
             FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
             transaction.setReorderingAllowed(true);
             transaction.addToBackStack(null);
-            transaction.replace(R.id.signup_fragment_container, PasswordFragment.class, args);
+            transaction.replace(R.id.auth_fragment_container, PasswordFragment.class, args);
             transaction.commit();
-          } else {
-            ApiError apiError = ErrorConverter.getInstance().parseError(response);
-            Log.e(TAG, apiError.toString());
-            Toast.makeText(view.getContext(), view.getContext().getResources().getString(R.string.generic_error), Toast.LENGTH_LONG).show();
           }
-        }
-      }
-
-      @Override
-      public void onFailure(Call<AuthDTO> call, Throwable error) {
-        if (error instanceof SocketTimeoutException) {
-          Log.e(TAG, Arrays.toString(error.getStackTrace()));
+        } else if (err instanceof SocketTimeoutException) {
+          Log.e(TAG, Arrays.toString(err.getStackTrace()));
           Toast.makeText(view.getContext(), view.getContext().getResources().getString(R.string.connection_timeout), Toast.LENGTH_LONG).show();
-        } else if (error instanceof IOException) {
-          Log.e(TAG, Arrays.toString(error.getStackTrace()));
+        } else if (err instanceof IOException) {
+          Log.e(TAG, Arrays.toString(err.getStackTrace()));
           Toast.makeText(view.getContext(), view.getContext().getResources().getString(R.string.read_timeout), Toast.LENGTH_LONG).show();
         } else {
-          if (call.isCanceled()) {
-            Log.e(TAG, Arrays.toString(error.getStackTrace()));
-            Toast.makeText(view.getContext(), view.getContext().getResources().getString(R.string.request_cancelled), Toast.LENGTH_LONG).show();
-          } else {
-            Log.e(TAG, Arrays.toString(error.getStackTrace()));
-            Toast.makeText(view.getContext(), view.getContext().getResources().getString(R.string.generic_error), Toast.LENGTH_LONG).show();
-          }
+          Log.e(TAG, Arrays.toString(err.getStackTrace()));
+          Toast.makeText(view.getContext(), view.getContext().getResources().getString(R.string.generic_error), Toast.LENGTH_LONG).show();
         }
-      }
-    });
+        },
+        () -> Log.d(TAG, "REQUEST COMPLETED"));
   }
 }
