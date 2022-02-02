@@ -11,11 +11,13 @@
         <entry key="app/src/main/res/drawable/ic_indicator_line_inactive.xml" value="0.21145833333333333" />
         <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.21145833333333333" />
         <entry key="app/src/main/res/font/anton.xml" value="0.22552083333333334" />
+        <entry key="app/src/main/res/layout/activity_auth.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.1953125" />
         <entry key="app/src/main/res/layout/activity_signup.xml" value="0.17" />
         <entry key="app/src/main/res/layout/fragment_blank.xml" value="0.17889492753623187" />
         <entry key="app/src/main/res/layout/fragment_email.xml" value="0.22" />
         <entry key="app/src/main/res/layout/fragment_finish.xml" value="0.17889492753623187" />
+        <entry key="app/src/main/res/layout/fragment_login.xml" value="0.17889492753623187" />
         <entry key="app/src/main/res/layout/fragment_password.xml" value="0.22" />
         <entry key="app/src/main/res/layout/onboard_item_container.xml" value="0.18795289855072464" />
         <entry key="app/src/main/res/layout/onboarding_item_container.xml" value="0.1953125" />
