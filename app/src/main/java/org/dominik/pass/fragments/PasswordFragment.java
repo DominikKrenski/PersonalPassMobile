@@ -187,7 +187,7 @@ public class PasswordFragment extends Fragment {
     FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
     transaction.setReorderingAllowed(true);
     transaction.addToBackStack(null);
-    transaction.replace(R.id.signup_fragment_container, FinishFragment.class, args);
+    transaction.replace(R.id.auth_fragment_container, FinishFragment.class, args);
     transaction.commit();
   }
 }
