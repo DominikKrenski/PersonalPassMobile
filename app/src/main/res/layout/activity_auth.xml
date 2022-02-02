@@ -5,10 +5,10 @@
   android:layout_width="match_parent"
   android:layout_height="match_parent"
   android:background="@color/white_dark"
-  tools:context=".activities.SignupActivity">
+  tools:context=".activities.AuthActivity">
 
   <androidx.fragment.app.FragmentContainerView
-    android:id="@+id/signup_fragment_container"
+    android:id="@+id/auth_fragment_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_constraintBottom_toBottomOf="parent"
