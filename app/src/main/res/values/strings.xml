@@ -26,6 +26,11 @@
   <string name="password_confirm_label">Confirm master password</string>
   <string name="password_hint_label">Password hint (optional)</string>
 
+  <!-- FINISH FRAGMENT -->
+  <string name="folder_vault_desc">Folder vault image</string>
+  <string name="finish_title">Your vault is ready!</string>
+  <string name="finish_text">Items you save in PersonalPass are stored safely in yout vault.</string>
+
   <!-- INDICATOR DESCRIPTION -->
   <string name="indicator_active_desc">Active registration page</string>
   <string name="indicator_inactive_desc">Inactive registration page</string>
@@ -34,6 +39,9 @@
   <string name="create_account_btn">CREATE MY ACCOUNT</string>
   <string name="sign_in_btn">SING IN INSTEAD</string>
   <string name="password_button">SET PASSWORD</string>
+  <string name="finish_button">GO TO YOUR VAULT.</string>
+  <string name="login_button">LOG IN</string>
+  <string name="register_button">CREATE ACCOUNT</string>
 
   <!-- ERROR MESSAGES -->
   <string name="email_required_msg">Email is required</string>
@@ -45,4 +53,5 @@
   <string name="read_timeout">Could not retrieve response from server. Please, try later.</string>
   <string name="passwords_not_equal">Passwords do not match.</string>
   <string name="password_hint_max_length">Hint can be at most 255 characters long.</string>
+  <string name="password_required_msg">Password is required</string>
 </resources>

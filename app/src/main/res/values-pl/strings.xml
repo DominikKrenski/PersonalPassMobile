@@ -25,6 +25,11 @@
   <string name="password_confirm_label">Potwierdź główne hasło</string>
   <string name="password_hint_label">Podpowiedź (opcjonalne)</string>
 
+  <!-- FINISH FRAGMENT -->
+  <string name="folder_vault_desc">Obrazek przedstawiający zabezpieczony jak skarbiec folder.</string>
+  <string name="finish_title">Twój sejf jest gotowy!</string>
+  <string name="finish_text">Rzeczy, które zapiszesz w PersonalPass są bezpiecznie przechowywane w Twoim osobistym sejfie.</string>
+
   <!-- INDICATOR DESCRIPTION -->
   <string name="indicator_active_desc">Aktywna strona rejestracji</string>
   <string name="indicator_inactive_desc">Nieaktywna strona rejestracji</string>
@@ -33,6 +38,9 @@
   <string name="create_account_btn">UTWÓRZ MOJE KONTO</string>
   <string name="sign_in_btn">ZALOGUJ SIĘ</string>
   <string name="password_button">USTAW HASŁO</string>
+  <string name="finish_button">PRZEJDŹ DO SEJFU.</string>
+  <string name="login_button">ZALOGUJ</string>
+  <string name="register_button">UTWÓRZ KONTO</string>
 
   <!-- ERROR MESSAGES -->
   <string name="email_required_msg">Email jest wymagany</string>
@@ -44,4 +52,5 @@
   <string name="read_timeout">Nie otrzymano odpowiedzi z serwera. Prosimy spróbować ponownie później.</string>
   <string name="passwords_not_equal">Hasła nie są jednakowe.</string>
   <string name="password_hint_max_length">Wskazówka może zawierać co najwyżej 255 znaków.</string>
+  <string name="password_required_msg">Hasło jest wymagane</string>
 </resources>
