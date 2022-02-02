@@ -10,6 +10,8 @@ public final class RegistrationDataDTO implements Serializable {
   private String salt;
   private String reminder;
 
+  public RegistrationDataDTO() {}
+
   public RegistrationDataDTO(String email, String password, String salt, String reminder) {
     this.email = email;
     this.password = password;
