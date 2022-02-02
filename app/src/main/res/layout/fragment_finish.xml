@@ -1,13 +1,117 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
+  android:paddingLeft="50dp"
+  android:paddingRight="50dp"
+  android:background="@color/white_dark"
+  android:animateLayoutChanges="true"
   tools:context=".fragments.FinishFragment">
 
-  <!-- TODO: Update blank fragment layout -->
-  <TextView
+  <androidx.appcompat.widget.LinearLayoutCompat
+    android:id="@+id/linearLayoutCompat"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" />
+    android:layout_height="wrap_content"
+    android:layout_marginTop="20dp"
+    android:orientation="horizontal"
+    android:padding="10dp"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent">
 
-</FrameLayout>
+    <ImageView
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_marginLeft="5dp"
+      android:layout_marginRight="5dp"
+      android:layout_weight="0.2"
+      android:background="@drawable/ic_indicator_line_inactive"
+      android:contentDescription="@string/indicator_inactive_desc" />
+
+    <ImageView
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_marginLeft="5dp"
+      android:layout_marginRight="5dp"
+      android:layout_weight="0.2"
+      android:background="@drawable/ic_indicator_line_inactive"
+      android:contentDescription="@string/indicator_inactive_desc" />
+
+    <ImageView
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_marginLeft="5dp"
+      android:layout_marginRight="5dp"
+      android:layout_weight="0.2"
+      android:background="@drawable/ic_indicator_line_active"
+      android:contentDescription="@string/indicator_active_desc" />
+
+    <ImageView
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_marginLeft="5dp"
+      android:layout_marginRight="5dp"
+      android:layout_weight="0.2"
+      android:background="@drawable/ic_indicator_line_inactive"
+      android:contentDescription="@string/indicator_inactive_desc" />
+  </androidx.appcompat.widget.LinearLayoutCompat>
+
+  <ImageView
+    android:id="@+id/imageView"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="100dp"
+    android:contentDescription="@string/folder_vault_desc"
+    android:scaleType="fitXY"
+    android:src="@drawable/vault_last"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintHorizontal_bias="0.498"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/linearLayoutCompat" />
+
+  <TextView
+    android:id="@+id/textView"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="40dp"
+    android:text="@string/finish_title"
+    android:textAlignment="center"
+    android:textSize="15sp"
+    android:textStyle="bold"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintHorizontal_bias="0.505"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/imageView" />
+
+  <TextView
+    android:id="@+id/textView2"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="16dp"
+    android:text="@string/finish_text"
+    android:textAlignment="center"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintHorizontal_bias="0.505"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+  <com.google.android.material.button.MaterialButton
+    style="@style/Widget.MaterialComponents.Button.TextButton"
+    android:id="@+id/finish_button"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="32dp"
+    android:backgroundTint="@color/red"
+    app:cornerRadius="12dp"
+    android:textColor="@color/white"
+    android:textSize="15sp"
+    android:text="@string/finish_button"
+    app:rippleColor="@color/white"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintHorizontal_bias="0.505"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/textView2" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
