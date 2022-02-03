@@ -1,5 +1,6 @@
 package org.dominik.pass.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -147,10 +148,7 @@ public class LoginFragment extends Fragment {
       .subscribeOn(Schedulers.io())
       .observeOn(AndroidSchedulers.mainThread())
       .subscribe(res -> {
-          accessData.setKeyHEX(res.getKey());
-          accessData.setAccessToken(res.getAccessToken());
-          accessData.setRefreshToken(res.getRefreshToken());
-          accessService.saveAccessData(view.getContext(), accessData);
+          Log.d(TAG, res.toString());
         },
         err -> {
           if (err instanceof HttpException) {
