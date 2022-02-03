@@ -1,12 +1,13 @@
 package org.dominik.pass.fragments;
 
-import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.ViewModelProvider;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,29 +19,17 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
 import org.dominik.pass.R;
-import org.dominik.pass.errors.ApiError;
-import org.dominik.pass.http.client.ApiClient;
-import org.dominik.pass.http.dto.EmailDTO;
-import org.dominik.pass.http.dto.LoginDataDTO;
-import org.dominik.pass.http.service.PassService;
-import org.dominik.pass.http.utils.ErrorConverter;
-import org.dominik.pass.models.AccessData;
-import org.dominik.pass.services.AccessService;
-import org.dominik.pass.utils.EncryptionService;
+import org.dominik.pass.enums.ErrorType;
+import org.dominik.pass.utils.SharedPrefs;
 import org.dominik.pass.utils.StringUtils;
 import org.dominik.pass.utils.Validator;
+import org.dominik.pass.viewmodels.AuthViewModel;
 
-import java.io.IOException;
-import java.net.SocketTimeoutException;
-import java.util.Arrays;
 import java.util.Objects;
-
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
-import io.reactivex.rxjava3.schedulers.Schedulers;
-import retrofit2.HttpException;
 
 public class LoginFragment extends Fragment {
   private static final String TAG = "LOGIN_FRAGMENT";
+  private AuthViewModel authViewModel;
 
   private TextView fragmentTitle;
   private TextInputLayout emailLayout;
@@ -91,11 +80,49 @@ public class LoginFragment extends Fragment {
       if (!(emailValid && passwordValid))
         return;
 
-      login(Objects.requireNonNull(emailInput.getText()).toString(), Objects.requireNonNull(passwordInput.getText()).toString());
+      authViewModel.login(Objects.requireNonNull(emailInput.getText()).toString(), Objects.requireNonNull(passwordInput.getText()).toString());
     });
 
 
     return view;
+  }
+
+  @Override
+  public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    super.onViewCreated(view, savedInstanceState);
+    authViewModel = new ViewModelProvider(requireActivity()).get(AuthViewModel.class);
+
+    authViewModel
+      .getSigninAccessData()
+      .observe(getViewLifecycleOwner(), data -> {
+        if (data != null) {
+          // save all encrypted data in Shared Preferences and master key in secure location
+          // because encrypted derivation key has been passed as byte[], it needs to be converted into string
+          SharedPrefs.getInstance().writeString(view.getContext(), "access_token", data.getAccessToken());
+          SharedPrefs.getInstance().writeString(view.getContext(), "refresh_token", data.getRefreshToken());
+          SharedPrefs.getInstance().writeString(view.getContext(), "derivation_key", new String(data.getDerivationKey()));
+        }
+      });
+
+    authViewModel
+      .getSigninError()
+      .observe(getViewLifecycleOwner(), err -> {
+        if (err == null)
+          return;
+
+        if (err.getApiError() != null) {
+          Toast.makeText(view.getContext(), err.getApiError().getMessage(), Toast.LENGTH_LONG).show();
+          return;
+        }
+
+        if (err.getErrorType() == ErrorType.SOCKET_ERROR) {
+          Toast.makeText(view.getContext(), view.getResources().getString(R.string.connection_timeout), Toast.LENGTH_LONG).show();
+        } else if (err.getErrorType() == ErrorType.IO_ERROR) {
+          Toast.makeText(view.getContext(), view.getResources().getString(R.string.read_timeout), Toast.LENGTH_LONG).show();
+        } else {
+          Toast.makeText(view.getContext(), view.getResources().getString(R.string.generic_error), Toast.LENGTH_LONG).show();
+        }
+      });
   }
 
   private boolean performEmailValidation(final CharSequence email) {
@@ -129,44 +156,5 @@ public class LoginFragment extends Fragment {
       passwordLayout.setError(view.getResources().getString(R.string.password_required_msg));
 
     return valid;
-  }
-
-  private void login(String email, String password) {
-    EncryptionService encService = EncryptionService.getInstance();
-    AccessService accessService = AccessService.getInstance();
-    PassService passService = ApiClient.getInstance().create(PassService.class);
-    AccessData accessData = new AccessData();
-
-    passService
-      .getAuthInfo(new EmailDTO(email))
-      .flatMap(res -> {
-        byte[] derivationKey = encService.regenerateDerivationKey(password, res.getSalt());
-        accessData.setDerivationKey(derivationKey);
-        byte[] derivationKeyHash = encService.doubleHashDerivationKey(derivationKey);
-        return passService.signin(new LoginDataDTO(email, encService.convertByteArrayToHex(derivationKeyHash)));
-      })
-      .subscribeOn(Schedulers.io())
-      .observeOn(AndroidSchedulers.mainThread())
-      .subscribe(res -> {
-          Log.d(TAG, res.toString());
-        },
-        err -> {
-          if (err instanceof HttpException) {
-            ApiError apiError = ErrorConverter.getInstance().parseError(Objects.requireNonNull(((HttpException) err).response()));
-            Log.e(TAG, apiError.toString());
-            Toast.makeText(view.getContext(), apiError.getMessage(), Toast.LENGTH_LONG).show();
-          } else if (err instanceof SocketTimeoutException) {
-            Log.e(TAG, Arrays.toString(err.getStackTrace()));
-            Toast.makeText(view.getContext(), view.getResources().getString(R.string.connection_timeout), Toast.LENGTH_LONG).show();
-          } else if (err instanceof IOException) {
-            Log.e(TAG, Arrays.toString(err.getStackTrace()));
-            Toast.makeText(view.getContext(), view.getResources().getString(R.string.read_timeout), Toast.LENGTH_LONG).show();
-          } else {
-            Log.e(TAG, Arrays.toString(err.getStackTrace()));
-            Toast.makeText(view.getContext(), view.getResources().getString(R.string.generic_error), Toast.LENGTH_LONG).show();
-          }
-        },
-        () -> Log.d(TAG, "Request completed")
-      );
   }
 }
