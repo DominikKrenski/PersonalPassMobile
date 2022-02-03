@@ -14,7 +14,7 @@ import org.dominik.pass.http.dto.RegistrationDataDTO;
 import org.dominik.pass.http.repositories.PassRepository;
 import org.dominik.pass.http.utils.ErrorConverter;
 import org.dominik.pass.models.AccessData;
-import org.dominik.pass.utils.EncryptionService;
+import org.dominik.pass.services.EncryptionService;
 
 import java.io.IOException;
 import java.net.SocketTimeoutException;

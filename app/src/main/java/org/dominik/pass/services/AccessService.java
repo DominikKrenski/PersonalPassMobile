@@ -3,7 +3,6 @@ package org.dominik.pass.services;
 import android.content.Context;
 
 import org.dominik.pass.models.AccessData;
-import org.dominik.pass.utils.EncryptionService;
 import org.dominik.pass.utils.SharedPrefs;
 
 import java.security.InvalidAlgorithmParameterException;

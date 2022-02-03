@@ -1,4 +1,4 @@
-package org.dominik.pass.utils;
+package org.dominik.pass.services;
 
 import java.nio.charset.StandardCharsets;
 import java.security.InvalidAlgorithmParameterException;

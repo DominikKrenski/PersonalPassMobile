@@ -12,7 +12,7 @@ import org.dominik.pass.fragments.LoginFragment;
 import org.dominik.pass.http.client.RetrofitClient;
 import org.dominik.pass.http.repositories.PassRepository;
 import org.dominik.pass.http.service.PassService;
-import org.dominik.pass.utils.EncryptionService;
+import org.dominik.pass.services.EncryptionService;
 import org.dominik.pass.viewmodels.AuthViewModel;
 
 public class AuthActivity extends AppCompatActivity {
