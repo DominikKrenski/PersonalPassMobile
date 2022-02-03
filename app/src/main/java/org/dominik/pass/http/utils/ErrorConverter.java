@@ -1,7 +1,7 @@
 package org.dominik.pass.http.utils;
 
 import org.dominik.pass.errors.ApiError;
-import org.dominik.pass.http.client.ApiClient;
+import org.dominik.pass.http.client.RetrofitClient;
 
 import java.io.IOException;
 import java.lang.annotation.Annotation;
@@ -17,16 +17,14 @@ public final class ErrorConverter {
   private ErrorConverter() {}
 
   public static ErrorConverter getInstance() {
-    if (INSTANCE == null) {
+    if (INSTANCE == null)
       INSTANCE = new ErrorConverter();
-    }
 
     return INSTANCE;
   }
 
   public ApiError parseError(Response<?> response) {
-    Converter<ResponseBody, ApiError> converter = ApiClient.getInstance().responseBodyConverter(ApiError.class, new Annotation[0]);
-
+    Converter<ResponseBody, ApiError> converter = RetrofitClient.getInstance().getRetrofit().responseBodyConverter(ApiError.class, new Annotation[0]);
     ApiError apiError = null;
 
     try {
