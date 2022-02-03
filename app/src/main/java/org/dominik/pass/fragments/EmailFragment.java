@@ -2,10 +2,12 @@ package org.dominik.pass.fragments;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.ViewModelProvider;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,34 +18,25 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
 import org.dominik.pass.R;
-import org.dominik.pass.errors.ApiError;
-import org.dominik.pass.http.client.ApiClient;
-import org.dominik.pass.http.dto.AuthDTO;
-import org.dominik.pass.http.dto.EmailDTO;
-import org.dominik.pass.http.service.PassService;
-import org.dominik.pass.http.utils.ErrorConverter;
+import org.dominik.pass.enums.ErrorType;
 import org.dominik.pass.utils.Validator;
+import org.dominik.pass.viewmodels.AuthViewModel;
 
-import java.io.IOException;
-import java.net.SocketTimeoutException;
-import java.util.Arrays;
-import java.util.Locale;
 import java.util.Objects;
 
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
-import io.reactivex.rxjava3.schedulers.Schedulers;
-import retrofit2.HttpException;
 
 public class EmailFragment extends Fragment {
   private static final String TAG = "EMAIL_FRAGMENT";
   private static final String EMAIL = "email_address";
 
+  private AuthViewModel authViewModel;
+
   private View view;
   private TextInputLayout emailInputLayout;
   private TextInputEditText emailInput;
-  private PassService passService;
 
-  public EmailFragment() { }
+  public EmailFragment() {
+  }
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
@@ -60,8 +53,6 @@ public class EmailFragment extends Fragment {
     MaterialButton signinBtn = view.findViewById(R.id.email_signin_button);
     emailInputLayout = view.findViewById(R.id.email_input_layout);
     emailInput = view.findViewById(R.id.email_input);
-
-    passService = ApiClient.getInstance().create(PassService.class);
 
     Validator validator = Validator.getInstance();
 
@@ -95,44 +86,52 @@ public class EmailFragment extends Fragment {
     return view;
   }
 
-  private void getAuthInfo(String email) {
-    passService
-      .getAuthInfo(new EmailDTO(email.toLowerCase(Locale.ROOT)))
-      .subscribeOn(Schedulers.computation())
-      .observeOn(AndroidSchedulers.mainThread())
-      .subscribe(
-        response -> {
-        // salt has been found, it means that account already exists
-        Log.d(TAG, response.toString());
-        emailInputLayout.setError(view.getResources().getString(R.string.email_in_use));
-      },
-        err -> {
-        if (err instanceof HttpException) {
-          if (((HttpException) err).code() == 404) {
-            ApiError apiError = ErrorConverter.getInstance().parseError(Objects.requireNonNull(((HttpException) err).response()));
-            Log.d(TAG, apiError.toString());
+  @Override
+  public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    super.onViewCreated(view, savedInstanceState);
+    authViewModel = new ViewModelProvider(requireActivity()).get(AuthViewModel.class);
 
-            // salt has not been found, it means that given email can be used
+    authViewModel
+      .getSalt()
+      .observe(getViewLifecycleOwner(), res -> {
+        if (res != null)
+          emailInputLayout.setError(view.getResources().getString(R.string.email_in_use));
+      });
+
+    authViewModel
+      .getSaltError()
+      .observe(getViewLifecycleOwner(), err -> {
+        if (err == null)
+          return;
+
+        if (err.getApiError() != null) {
+          if (err.getApiError().getStatus().equals("Not Found")) {
+            // salt has not been found, it means that account does not exist
             Bundle args = new Bundle();
-            args.putString(EMAIL, email);
+            args.putString(EMAIL, Objects.requireNonNull(emailInput.getText()).toString());
 
             FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
             transaction.setReorderingAllowed(true);
             transaction.addToBackStack(null);
             transaction.replace(R.id.auth_fragment_container, PasswordFragment.class, args);
             transaction.commit();
+          } else {
+            Toast.makeText(view.getContext(), err.getApiError().getMessage(), Toast.LENGTH_LONG).show();
           }
-        } else if (err instanceof SocketTimeoutException) {
-          Log.e(TAG, Arrays.toString(err.getStackTrace()));
-          Toast.makeText(view.getContext(), view.getContext().getResources().getString(R.string.connection_timeout), Toast.LENGTH_LONG).show();
-        } else if (err instanceof IOException) {
-          Log.e(TAG, Arrays.toString(err.getStackTrace()));
-          Toast.makeText(view.getContext(), view.getContext().getResources().getString(R.string.read_timeout), Toast.LENGTH_LONG).show();
-        } else {
-          Log.e(TAG, Arrays.toString(err.getStackTrace()));
-          Toast.makeText(view.getContext(), view.getContext().getResources().getString(R.string.generic_error), Toast.LENGTH_LONG).show();
+          return;
         }
-        },
-        () -> Log.d(TAG, "REQUEST COMPLETED"));
+
+          if (err.getErrorType() == ErrorType.SOCKET_ERROR) {
+            Toast.makeText(view.getContext(), view.getResources().getString(R.string.connection_timeout), Toast.LENGTH_LONG).show();
+          } else if (err.getErrorType() == ErrorType.IO_ERROR) {
+            Toast.makeText(view.getContext(), view.getResources().getString(R.string.read_timeout), Toast.LENGTH_LONG).show();
+          } else {
+            Toast.makeText(view.getContext(), view.getResources().getString(R.string.generic_error), Toast.LENGTH_LONG).show();
+          }
+      });
+  }
+
+  private void getAuthInfo(String email) {
+    authViewModel.getSalt(email);
   }
 }
