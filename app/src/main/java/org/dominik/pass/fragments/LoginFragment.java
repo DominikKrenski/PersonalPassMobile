@@ -98,9 +98,10 @@ public class LoginFragment extends Fragment {
         if (data != null) {
           // save all encrypted data in Shared Preferences and master key in secure location
           // because encrypted derivation key has been passed as byte[], it needs to be converted into string
-          SharedPrefs.getInstance().writeString(view.getContext(), "access_token", data.getAccessToken());
-          SharedPrefs.getInstance().writeString(view.getContext(), "refresh_token", data.getRefreshToken());
-          SharedPrefs.getInstance().writeString(view.getContext(), "derivation_key", new String(data.getDerivationKey()));
+          SharedPrefs.getInstance().writeString(view.getContext(), "encrypted_access_token", data.getAccessToken());
+          SharedPrefs.getInstance().writeString(view.getContext(), "encrypted_refresh_token", data.getRefreshToken());
+          SharedPrefs.getInstance().writeString(view.getContext(), "encrypted_derivation_key", new String(data.getDerivationKey()));
+          SharedPrefs.getInstance().writeString(view.getContext(), "encrypted_private_key", data.getKeyHEX());
         }
       });
 

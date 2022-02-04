@@ -15,6 +15,7 @@ import org.dominik.pass.http.repositories.PassRepository;
 import org.dominik.pass.http.utils.ErrorConverter;
 import org.dominik.pass.models.AccessData;
 import org.dominik.pass.services.EncryptionService;
+import org.dominik.pass.services.PrivateStore;
 
 import java.io.IOException;
 import java.net.SocketTimeoutException;
@@ -136,8 +137,9 @@ public final class AuthViewModel extends ViewModel {
           byte[] derivationKey = encryptionService.regenerateDerivationKey(password, registrationData.getSalt());
           loginData.setAccessToken(encryptionService.encryptData(res.getAccessToken(), derivationKey));
           loginData.setRefreshToken(encryptionService.encryptData(res.getRefreshToken(), derivationKey));
-          loginData.setKeyHEX(res.getKey());
+          //loginData.setKeyHEX(res.getKey());
           loginData.setDerivationKey(encryptionService.encryptDerivationKey(derivationKey, res.getKey()).getBytes(StandardCharsets.UTF_8));
+          loginData.setKeyHEX(PrivateStore.getInstance().encrypt(encryptionService.convertHexToByteArray(res.getKey())));
 
           signupAccessData.setValue(loginData);
           signupError.setValue(null);
@@ -178,13 +180,14 @@ public final class AuthViewModel extends ViewModel {
           // encrypt all data and pass it to the fragment
           data.setAccessToken(encryptionService.encryptData(res.getAccessToken(), data.getDerivationKey()));
           data.setRefreshToken(encryptionService.encryptData(res.getRefreshToken(), data.getDerivationKey()));
-          data.setKeyHEX(res.getKey());
-          data.setDerivationKey(encryptionService.encryptDerivationKey(data.getDerivationKey(), data.getKeyHEX()).getBytes(StandardCharsets.UTF_8));
+          data.setDerivationKey(encryptionService.encryptDerivationKey(data.getDerivationKey(), res.getKey()).getBytes(StandardCharsets.UTF_8));
+          data.setKeyHEX(PrivateStore.getInstance().encrypt(encryptionService.convertHexToByteArray(res.getKey())));
 
           signinAccessData.setValue(data);
           signinError.setValue(null);
         },
         err -> {
+          Log.e(TAG, Arrays.toString(err.getStackTrace()));
           ErrorWrapper errorWrapper = new ErrorWrapper();
           if (err instanceof HttpException) {
             ApiError apiError = ErrorConverter.getInstance().parseError(Objects.requireNonNull(((HttpException) err).response()));
