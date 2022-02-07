@@ -71,8 +71,8 @@ public final class PrivateStore {
 
   public byte[] decrypt(String dataHEX) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
     String[] parts = dataHEX.split("\\.");
-    byte[] iv = parts[0].getBytes(StandardCharsets.UTF_8);
-    byte[] encryptedData = parts[1].getBytes(StandardCharsets.UTF_8);
+    byte[] iv = EncryptionService.getInstance().convertHexToByteArray(parts[0]);
+    byte[] encryptedData = EncryptionService.getInstance().convertHexToByteArray(parts[1]);
 
     Cipher cipher = Cipher.getInstance(TRANSFORMATION);
     IvParameterSpec spec = new IvParameterSpec(iv);
