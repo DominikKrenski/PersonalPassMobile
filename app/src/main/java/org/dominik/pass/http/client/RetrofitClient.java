@@ -1,5 +1,8 @@
 package org.dominik.pass.http.client;
 
+import org.dominik.pass.http.interceptors.RequestInterceptor;
+import org.dominik.pass.services.AccessService;
+
 import java.util.concurrent.TimeUnit;
 
 import hu.akarnokd.rxjava3.retrofit.RxJava3CallAdapterFactory;
@@ -45,6 +48,8 @@ public final class RetrofitClient {
 
   private static OkHttpClient createClient() {
     HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
+    RequestInterceptor requestInterceptor = new RequestInterceptor(AccessService.getInstance());
+
     loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
 
     return new OkHttpClient.Builder()
@@ -52,6 +57,7 @@ public final class RetrofitClient {
       .connectTimeout(20, TimeUnit.SECONDS)
       .readTimeout(30, TimeUnit.SECONDS)
       .writeTimeout(30, TimeUnit.SECONDS)
+      .addInterceptor(requestInterceptor)
       .addInterceptor(loggingInterceptor)
       .build();
   }
