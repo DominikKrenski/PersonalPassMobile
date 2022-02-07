@@ -2,7 +2,7 @@ package org.dominik.pass.services;
 
 import android.content.Context;
 
-import org.dominik.pass.models.AccessData;
+import org.dominik.pass.models.AccessDataRaw;
 import org.dominik.pass.utils.SharedPrefs;
 
 import java.security.InvalidAlgorithmParameterException;
@@ -14,12 +14,16 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 
 import io.reactivex.rxjava3.subjects.BehaviorSubject;
-import io.reactivex.rxjava3.subjects.Subject;
 
 public final class AccessService {
+  private static final String DERIVATION_KEY = "encrypted_derivation_key";
+  private static final String PRIVATE_KEY = "encrypted_private_key";
+  private static final String ACCESS_TOKEN = "encrypted_access_token";
+  private static final String REFRESH_TOKEN = "encrypted_refresh_token";
+
   private static AccessService INSTANCE;
 
-  private BehaviorSubject<AccessData> subject = BehaviorSubject.create();
+  private BehaviorSubject<AccessDataRaw> subject = BehaviorSubject.create();
 
   private AccessService() {}
 
@@ -30,22 +34,34 @@ public final class AccessService {
     return INSTANCE;
   }
 
-  public void saveAccessData(Context context, AccessData accessData) throws InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
+  public void passAccessData(Context ctx) throws InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
     SharedPrefs sharedPrefs = SharedPrefs.getInstance();
     EncryptionService encryptionService = EncryptionService.getInstance();
+    PrivateStore privateStore = PrivateStore.getInstance();
 
-    /*String encryptedDerivationKey = encryptionService.encryptDerivationKey(accessData.getDerivationKey(), accessData.getKeyHEX());
-    String encryptedAccessToken = encryptionService.encryptData(accessData.getAccessToken(), accessData.getDerivationKey());
-    String encryptedRefreshToken = encryptionService.encryptData(accessData.getRefreshToken(), accessData.getDerivationKey());
+    String encryptedDerivationKey = sharedPrefs.readString(ctx, DERIVATION_KEY, null);
+    String encryptedPrivateKey = sharedPrefs.readString(ctx, PRIVATE_KEY, null);
+    String encryptedAccessToken = sharedPrefs.readString(ctx, ACCESS_TOKEN, null);
+    String encryptedRefreshToken = sharedPrefs.readString(ctx, REFRESH_TOKEN, null);
 
-    sharedPrefs.writeString(context, "derivation_key", encryptedDerivationKey);
-    sharedPrefs.writeString(context, "access_token", encryptedAccessToken);
-    sharedPrefs.writeString(context, "refresh_token", encryptedRefreshToken);
+    // decrypt private key
+    byte[] privateKey = privateStore.decrypt(encryptedPrivateKey);
 
-    subject.onNext(accessData);*/
+    // decrypt derivation key
+    byte[] derivationKey = encryptionService.decryptDerivationKey(encryptedDerivationKey, privateKey);
+
+    // decrypt access token
+    String accessToken = encryptionService.decryptData(encryptedAccessToken, derivationKey);
+
+    // decrypt refresh token
+    String refreshToken = encryptionService.decryptData(encryptedRefreshToken, derivationKey);
+
+    AccessDataRaw accessDataRaw = new AccessDataRaw(derivationKey, privateKey, accessToken, refreshToken);
+
+    subject.onNext(accessDataRaw);
   }
 
-  public Subject<AccessData> getData() {
+  public BehaviorSubject<AccessDataRaw> getAccessData() {
     return subject;
   }
 }
