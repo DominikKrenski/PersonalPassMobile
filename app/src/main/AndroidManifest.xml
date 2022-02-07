@@ -14,6 +14,9 @@
     android:supportsRtl="true"
     android:theme="@style/Theme.PersonalPass">
     <activity
+      android:name=".activities.DataActivity"
+      android:exported="false" />
+    <activity
       android:name=".activities.AuthActivity"
       android:exported="false" />
     <activity
