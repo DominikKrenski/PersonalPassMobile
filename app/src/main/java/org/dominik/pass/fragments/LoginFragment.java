@@ -1,5 +1,6 @@
 package org.dominik.pass.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -19,6 +20,7 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
 import org.dominik.pass.R;
+import org.dominik.pass.activities.DataActivity;
 import org.dominik.pass.enums.ErrorType;
 import org.dominik.pass.utils.SharedPrefs;
 import org.dominik.pass.utils.StringUtils;
@@ -100,6 +102,10 @@ public class LoginFragment extends Fragment {
           SharedPrefs.getInstance().writeString(view.getContext(), "encrypted_refresh_token", data.getRefreshToken());
           SharedPrefs.getInstance().writeString(view.getContext(), "encrypted_derivation_key", data.getDerivationKey());
           SharedPrefs.getInstance().writeString(view.getContext(), "encrypted_private_key", data.getPrivateKey());
+
+          // go to the DataActivity
+          Intent intent = new Intent(view.getContext(), DataActivity.class);
+          startActivity(intent);
         }
       });
 
