@@ -8,6 +8,15 @@ public final class AccessDataRaw {
   private String accessToken;
   private String refreshToken;
 
+  public AccessDataRaw() {}
+
+  public AccessDataRaw(byte[] derivationKey, byte[] privateKey, String accessToken, String refreshToken) {
+    this.derivationKey = derivationKey;
+    this.privateKey = privateKey;
+    this.accessToken = accessToken;
+    this.refreshToken = refreshToken;
+  }
+
   public byte[] getDerivationKey() {
     return derivationKey;
   }
