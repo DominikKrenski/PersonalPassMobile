@@ -168,16 +168,16 @@ public final class EncryptionService {
     return ivHEX + "." + encryptedDerivationKeyHEX;
   }
 
-  public byte[] decryptDerivationKey(String encryptedDerivationKeyHEX, String encryptionKeyHEX) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
+  public byte[] decryptDerivationKey(String encryptedDerivationKeyHEX, byte[] encryptionKey) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
     // split derivationKeyHex into two parts -> 1. ivHEX 2. derivationKeyHEX
     String[] tmp = encryptedDerivationKeyHEX.split("\\.");
 
     byte[] iv = convertHexToByteArray(tmp[0]);
     byte[] encryptedDerivationKey = convertHexToByteArray(tmp[1]);
-    byte[] enryptionKey = convertHexToByteArray(encryptionKeyHEX);
+    //byte[] enryptionKey = convertHexToByteArray(encryptionKeyHEX);
 
     // convert encryption key to SecretKey
-    SecretKey secretKey = new SecretKeySpec(enryptionKey, "AES");
+    SecretKey secretKey = new SecretKeySpec(encryptionKey, "AES");
 
     // create GCMParameterSpec instance
     GCMParameterSpec gcmParameterSpec = new GCMParameterSpec(TAG_LENGTH * 8, iv);
