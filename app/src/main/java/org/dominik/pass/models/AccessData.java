@@ -1,27 +1,25 @@
 package org.dominik.pass.models;
 
-import java.util.Arrays;
-
 public final class AccessData {
-  byte[] derivationKey;
-  String keyHEX;
+  String derivationKey;
+  String privateKey;
   String accessToken;
   String refreshToken;
 
-  public byte[] getDerivationKey() {
+  public String getDerivationKey() {
     return derivationKey;
   }
 
-  public void setDerivationKey(byte[] derivationKey) {
+  public void setDerivationKey(String derivationKey) {
     this.derivationKey = derivationKey;
   }
 
-  public String getKeyHEX() {
-    return keyHEX;
+  public String getPrivateKey() {
+    return privateKey;
   }
 
-  public void setKeyHEX(String keyHEX) {
-    this.keyHEX = keyHEX;
+  public void setPrivateKey(String privateKey) {
+    this.privateKey = privateKey;
   }
 
   public String getAccessToken() {
@@ -43,8 +41,8 @@ public final class AccessData {
   @Override
   public String toString() {
     return "AccessData{" +
-      "derivationKey=" + Arrays.toString(derivationKey) +
-      ", keyHEX='" + keyHEX + '\'' +
+      "derivationKey='" + derivationKey + '\'' +
+      ", privateKey='" + privateKey + '\'' +
       ", accessToken='" + accessToken + '\'' +
       ", refreshToken='" + refreshToken + '\'' +
       '}';

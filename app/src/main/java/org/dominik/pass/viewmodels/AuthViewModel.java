@@ -133,17 +133,17 @@ public final class AuthViewModel extends ViewModel {
       .subscribeOn(Schedulers.io())
       .observeOn(AndroidSchedulers.mainThread())
       .subscribe(res -> {
-          // encrypt all data and pass it to the fragment
-          byte[] derivationKey = encryptionService.regenerateDerivationKey(password, registrationData.getSalt());
-          loginData.setAccessToken(encryptionService.encryptData(res.getAccessToken(), derivationKey));
-          loginData.setRefreshToken(encryptionService.encryptData(res.getRefreshToken(), derivationKey));
-          //loginData.setKeyHEX(res.getKey());
-          loginData.setDerivationKey(encryptionService.encryptDerivationKey(derivationKey, res.getKey()).getBytes(StandardCharsets.UTF_8));
-          loginData.setKeyHEX(PrivateStore.getInstance().encrypt(encryptionService.convertHexToByteArray(res.getKey())));
+        byte[] derivationKey = encryptionService.regenerateDerivationKey(password, registrationData.getSalt());
 
-          signupAccessData.setValue(loginData);
-          signupError.setValue(null);
-        },
+        // encrypt all data and pass it to the fragment
+        loginData.setAccessToken(encryptionService.encryptData(res.getAccessToken(), derivationKey));
+        loginData.setRefreshToken(encryptionService.encryptData(res.getRefreshToken(), derivationKey));
+        loginData.setDerivationKey(encryptionService.encryptDerivationKey(derivationKey, res.getKey()));
+        loginData.setPrivateKey(PrivateStore.getInstance().encrypt(encryptionService.convertHexToByteArray(res.getKey())));
+
+        signupAccessData.setValue(loginData);
+        signupError.setValue(null);
+      },
         err -> {
           Log.e(TAG, Arrays.toString(err.getStackTrace()));
           ErrorWrapper errorWrapper = new ErrorWrapper();
@@ -170,22 +170,25 @@ public final class AuthViewModel extends ViewModel {
       .getAuthInfo(email)
       .flatMap(res -> {
         byte[] derivationKey = encryptionService.regenerateDerivationKey(password, res.getSalt());
-        data.setDerivationKey(derivationKey);
+        String key = encryptionService.convertByteArrayToHex(derivationKey);
+        data.setDerivationKey(key);
         byte[] derivationKeyHash = encryptionService.doubleHashDerivationKey(derivationKey);
         return passRepository.signin(email, encryptionService.convertByteArrayToHex(derivationKeyHash));
       })
       .subscribeOn(Schedulers.io())
       .observeOn(AndroidSchedulers.mainThread())
       .subscribe(res -> {
-          // encrypt all data and pass it to the fragment
-          data.setAccessToken(encryptionService.encryptData(res.getAccessToken(), data.getDerivationKey()));
-          data.setRefreshToken(encryptionService.encryptData(res.getRefreshToken(), data.getDerivationKey()));
-          data.setDerivationKey(encryptionService.encryptDerivationKey(data.getDerivationKey(), res.getKey()).getBytes(StandardCharsets.UTF_8));
-          data.setKeyHEX(PrivateStore.getInstance().encrypt(encryptionService.convertHexToByteArray(res.getKey())));
+        byte[] derivationKey = encryptionService.convertHexToByteArray(data.getDerivationKey());
 
-          signinAccessData.setValue(data);
-          signinError.setValue(null);
-        },
+        // encrypt all data and pass it to the fragment
+        data.setAccessToken(encryptionService.encryptData(res.getAccessToken(), derivationKey));
+        data.setRefreshToken(encryptionService.encryptData(res.getRefreshToken(), derivationKey));
+        data.setDerivationKey(encryptionService.encryptDerivationKey(derivationKey, res.getKey()));
+        data.setPrivateKey(PrivateStore.getInstance().encrypt(encryptionService.convertHexToByteArray(res.getKey())));
+
+        signinAccessData.setValue(data);
+        signinError.setValue(null);
+      },
         err -> {
           Log.e(TAG, Arrays.toString(err.getStackTrace()));
           ErrorWrapper errorWrapper = new ErrorWrapper();

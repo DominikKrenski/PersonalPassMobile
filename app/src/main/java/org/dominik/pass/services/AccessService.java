@@ -34,7 +34,7 @@ public final class AccessService {
     SharedPrefs sharedPrefs = SharedPrefs.getInstance();
     EncryptionService encryptionService = EncryptionService.getInstance();
 
-    String encryptedDerivationKey = encryptionService.encryptDerivationKey(accessData.getDerivationKey(), accessData.getKeyHEX());
+    /*String encryptedDerivationKey = encryptionService.encryptDerivationKey(accessData.getDerivationKey(), accessData.getKeyHEX());
     String encryptedAccessToken = encryptionService.encryptData(accessData.getAccessToken(), accessData.getDerivationKey());
     String encryptedRefreshToken = encryptionService.encryptData(accessData.getRefreshToken(), accessData.getDerivationKey());
 
@@ -42,7 +42,7 @@ public final class AccessService {
     sharedPrefs.writeString(context, "access_token", encryptedAccessToken);
     sharedPrefs.writeString(context, "refresh_token", encryptedRefreshToken);
 
-    subject.onNext(accessData);
+    subject.onNext(accessData);*/
   }
 
   public Subject<AccessData> getData() {

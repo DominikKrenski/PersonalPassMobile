@@ -69,9 +69,8 @@ public final class PrivateStore {
     return EncryptionService.getInstance().convertByteArrayToHex(iv) + SEPARATOR + EncryptionService.getInstance().convertByteArrayToHex(encryptedData);
   }
 
-  public String decrypt(String dataHEX) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
+  public byte[] decrypt(String dataHEX) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
     String[] parts = dataHEX.split("\\.");
-
     byte[] iv = parts[0].getBytes(StandardCharsets.UTF_8);
     byte[] encryptedData = parts[1].getBytes(StandardCharsets.UTF_8);
 
@@ -79,7 +78,8 @@ public final class PrivateStore {
     IvParameterSpec spec = new IvParameterSpec(iv);
 
     cipher.init(Cipher.DECRYPT_MODE, secretKey, spec);
-    return EncryptionService.getInstance().convertByteArrayToHex(cipher.doFinal(encryptedData));
+
+    return cipher.doFinal(encryptedData);
   }
 
   public static PrivateStore getInstance() {
