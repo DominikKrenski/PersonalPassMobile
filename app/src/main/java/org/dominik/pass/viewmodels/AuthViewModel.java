@@ -19,7 +19,6 @@ import org.dominik.pass.services.PrivateStore;
 
 import java.io.IOException;
 import java.net.SocketTimeoutException;
-import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Objects;
 
