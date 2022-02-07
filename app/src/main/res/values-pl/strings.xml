@@ -53,4 +53,5 @@
   <string name="passwords_not_equal">Hasła nie są jednakowe.</string>
   <string name="password_hint_max_length">Wskazówka może zawierać co najwyżej 255 znaków.</string>
   <string name="password_required_msg">Hasło jest wymagane</string>
+  <string name="missing_access_data">Brak jednej z wymaganych danych. Prosimy o powtórne zalogowanie.</string>
 </resources>

@@ -54,4 +54,5 @@
   <string name="passwords_not_equal">Passwords do not match.</string>
   <string name="password_hint_max_length">Hint can be at most 255 characters long.</string>
   <string name="password_required_msg">Password is required</string>
+  <string name="missing_access_data">One of the required access data is missing. Please, try to login once again.</string>
 </resources>
