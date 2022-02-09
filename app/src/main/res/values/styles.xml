@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <style name="Widget.App.NavigationView" parent="Widget.MaterialComponents.NavigationView">
+    <item name="materialThemeOverlay">@style/ThemeOverlay.App.NavigationView</item>
+    <item name="itemIconTint">@color/navigation_item_color</item>
+    <item name="itemTextColor">@color/navigation_item_color</item>
+    <item name="itemShapeFillColor">@color/navigation_item_background_color</item>
+    <item name="android:colorControlActivated">@android:color/transparent</item>
+  </style>
+
+  <style name="ThemeOverlay.App.NavigationView" parent="">
+    <item name="android:colorControlHighlight">@android:color/transparent</item>
+  </style>
+</resources>
