@@ -1,9 +1,21 @@
 package org.dominik.pass.viewmodels;
 
+import android.util.Log;
+
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import org.dominik.pass.errors.ErrorWrapper;
+import org.dominik.pass.http.dto.DataDTO;
 import org.dominik.pass.http.repositories.PassRepository;
 import org.dominik.pass.services.EncryptionService;
+
+import java.util.Arrays;
+import java.util.List;
+
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public final class DataViewModel extends ViewModel {
   private static final String TAG = "DATA_VIEW_MODEL";
@@ -11,27 +23,30 @@ public final class DataViewModel extends ViewModel {
   private PassRepository passRepository;
   private EncryptionService encryptionService;
 
+  private Disposable allDataDisposable;
+
+  private final MutableLiveData<List<DataDTO>> allData = new MutableLiveData<>();
+
   public void init(PassRepository passRepository, EncryptionService encryptionService) {
     this.passRepository = passRepository;
     this.encryptionService = encryptionService;
   }
 
-  /*public void prepareAccessData(String accessTokenHEX, String refreshTokenHEX, String derivationKeyHEX, String privateKeyHEX) throws InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
-    // decrypt private key
-    byte[] privateKey = PrivateStore.getInstance().decrypt(privateKeyHEX);
+  public void getAllData() {
+    allDataDisposable = passRepository
+      .getAllData()
+      .subscribeOn(Schedulers.io())
+      .observeOn(AndroidSchedulers.mainThread())
+      .subscribe(res -> {
+        allData.setValue(res);
+        Log.d(TAG, res.toString());
+      },
+        err -> Log.d(TAG, Arrays.toString(err.getStackTrace())));
+  }
 
-    // decrypt derivation key
-    byte[] derivationKey = encryptionService.decryptDerivationKey(derivationKeyHEX, privateKey);
-
-    // decrypt access token
-    String accessToken = encryptionService.decryptData(accessTokenHEX, derivationKey);
-
-    // decrypt refresh token
-    String refreshToken = encryptionService.decryptData(refreshTokenHEX, derivationKey);
-
-    AccessDataRaw dataRaw = new AccessDataRaw(derivationKey, privateKey, accessToken, refreshToken);
-    Log.d(TAG, dataRaw.toString());
-
-    accessData.setValue(dataRaw);
-  }*/
+  @Override
+  protected void onCleared() {
+    allDataDisposable.dispose();
+    super.onCleared();
+  }
 }
