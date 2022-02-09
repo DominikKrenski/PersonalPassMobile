@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -98,6 +99,7 @@ public class LoginFragment extends Fragment {
       .getSigninAccessData()
       .observe(getViewLifecycleOwner(), data -> {
         if (data != null) {
+          SharedPrefs.getInstance().writeString(view.getContext(), "current_user", Objects.requireNonNull(emailInput.getText()).toString());
           SharedPrefs.getInstance().writeString(view.getContext(), "encrypted_access_token", data.getAccessToken());
           SharedPrefs.getInstance().writeString(view.getContext(), "encrypted_refresh_token", data.getRefreshToken());
           SharedPrefs.getInstance().writeString(view.getContext(), "encrypted_derivation_key", data.getDerivationKey());

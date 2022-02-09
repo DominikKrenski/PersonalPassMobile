@@ -80,6 +80,7 @@ public class FinishFragment extends Fragment {
       .getSignupAccessData()
       .observe(getViewLifecycleOwner(), data -> {
         if (data != null) {
+          SharedPrefs.getInstance().writeString(view.getContext(), "current_user", registrationData.getEmail());
           SharedPrefs.getInstance().writeString(view.getContext(), "encrypted_access_token", data.getAccessToken());
           SharedPrefs.getInstance().writeString(view.getContext(), "encrypted_refresh_token", data.getRefreshToken());
           SharedPrefs.getInstance().writeString(view.getContext(), "encrypted_derivation_key", data.getDerivationKey());
