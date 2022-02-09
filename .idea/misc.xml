@@ -9,11 +9,14 @@
         <entry key="app/src/main/res/drawable/background_round_padded_selected.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/backround_round_padded_pressed.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/edit_text_selector.xml" value="0.198" />
+        <entry key="app/src/main/res/drawable/ic_baseline_house_24.xml" value="0.203" />
+        <entry key="app/src/main/res/drawable/ic_baseline_settings_24.xml" value="0.203" />
         <entry key="app/src/main/res/drawable/ic_indicator_line.xml" value="0.21145833333333333" />
         <entry key="app/src/main/res/drawable/ic_indicator_line_active.xml" value="0.203" />
         <entry key="app/src/main/res/drawable/ic_indicator_line_inactive.xml" value="0.21145833333333333" />
         <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.21145833333333333" />
         <entry key="app/src/main/res/drawable/ic_navigation_divider.xml" value="0.203" />
+        <entry key="app/src/main/res/drawable/ic_settings_black_24dp.xml" value="0.203" />
         <entry key="app/src/main/res/drawable/menu_background_color_state.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/menu_item_background_color_state.xml" value="0.1" />
         <entry key="app/src/main/res/font/anton.xml" value="0.22552083333333334" />
