@@ -4,22 +4,27 @@
     <item
       android:id="@+id/all_items_item"
       android:title="@string/all_items_item"
+      android:icon="@drawable/ic_home"
       android:checked="true" />
 
     <item
       android:id="@+id/passwords_item"
-      android:title="@string/passwords_item" />
+      android:title="@string/passwords_item"
+      android:icon="@drawable/ic_lock"/>
 
     <item
       android:id="@+id/addresses_item"
-      android:title="@string/addresses_item" />
+      android:title="@string/addresses_item"
+      android:icon="@drawable/ic_contact"/>
 
     <item
       android:id="@+id/websites_item"
-      android:title="@string/websites_item" />
+      android:title="@string/websites_item"
+      android:icon="@drawable/ic_website"/>
 
     <item
       android:id="@+id/notes_item"
-      android:title="@string/notes_item" />
+      android:title="@string/notes_item"
+      android:icon="@drawable/ic_note"/>
   </group>
 </menu>
