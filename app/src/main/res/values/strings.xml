@@ -35,6 +35,15 @@
   <string name="indicator_active_desc">Active registration page</string>
   <string name="indicator_inactive_desc">Inactive registration page</string>
 
+  <!-- NAVIGATION -->
+  <string name="all_items_item">All items</string>
+  <string name="passwords_item">Passwords</string>
+  <string name="addresses_item">Addresses</string>
+  <string name="websites_item">Websites</string>
+  <string name="notes_item">Notes</string>
+  <string name="openNavDrawer">Open navigation</string>
+  <string name="closeNavDrawer">Close navigation</string>
+
   <!-- BUTTONS -->
   <string name="create_account_btn">CREATE MY ACCOUNT</string>
   <string name="sign_in_btn">SING IN INSTEAD</string>

@@ -34,6 +34,15 @@
   <string name="indicator_active_desc">Aktywna strona rejestracji</string>
   <string name="indicator_inactive_desc">Nieaktywna strona rejestracji</string>
 
+  <!-- NAVIGATION -->
+  <string name="all_items_item">Wszystkie elementy</string>
+  <string name="passwords_item">Hasła</string>
+  <string name="addresses_item">Adresy</string>
+  <string name="websites_item">Witryny</string>
+  <string name="notes_item">Notatki</string>
+  <string name="openNavDrawer">Otwórz nawigację</string>
+  <string name="closeNavDrawer">Zamknij nawigację</string>
+
   <!-- BUTTONS -->
   <string name="create_account_btn">UTWÓRZ MOJE KONTO</string>
   <string name="sign_in_btn">ZALOGUJ SIĘ</string>
