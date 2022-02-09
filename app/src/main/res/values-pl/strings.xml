@@ -40,6 +40,7 @@
   <string name="addresses_item">Adresy</string>
   <string name="websites_item">Witryny</string>
   <string name="notes_item">Notatki</string>
+  <string name="settings_item">Ustawienia</string>
   <string name="openNavDrawer">Otwórz nawigację</string>
   <string name="closeNavDrawer">Zamknij nawigację</string>
 
