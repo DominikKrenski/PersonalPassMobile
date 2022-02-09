@@ -41,6 +41,7 @@
   <string name="addresses_item">Addresses</string>
   <string name="websites_item">Websites</string>
   <string name="notes_item">Notes</string>
+  <string name="settings_item">Settings</string>
   <string name="openNavDrawer">Open navigation</string>
   <string name="closeNavDrawer">Close navigation</string>
 
