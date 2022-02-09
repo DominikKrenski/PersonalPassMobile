@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+  <group android:checkableBehavior="single">
+    <item
+      android:id="@+id/all_items_item"
+      android:title="@string/all_items_item"
+      android:checked="true" />
+
+    <item
+      android:id="@+id/passwords_item"
+      android:title="@string/passwords_item" />
+
+    <item
+      android:id="@+id/addresses_item"
+      android:title="@string/addresses_item" />
+
+    <item
+      android:id="@+id/websites_item"
+      android:title="@string/websites_item" />
+
+    <item
+      android:id="@+id/notes_item"
+      android:title="@string/notes_item" />
+  </group>
+</menu>
