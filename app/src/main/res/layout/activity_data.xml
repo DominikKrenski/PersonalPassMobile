@@ -27,8 +27,13 @@
         android:layout_height="?attr/actionBarSize"
         android:id="@+id/menu_toolbar"
         />
-
     </com.google.android.material.appbar.AppBarLayout>
+
+    <FrameLayout
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:layout_marginTop="?attr/actionBarSize"
+      android:id="@+id/data_fragments" />
   </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
   <com.google.android.material.navigation.NavigationView
@@ -41,5 +46,4 @@
     android:background="@color/secure_nav_background"
     app:headerLayout="@layout/navigation_header"
     app:menu="@menu/navigation_drawer"/>
-
 </androidx.drawerlayout.widget.DrawerLayout>
