@@ -1,6 +1,9 @@
 package org.dominik.pass.http.dto;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
 import org.dominik.pass.http.enums.DataType;
+import org.dominik.pass.utils.ApiInstantDeserializer;
 
 import java.time.Instant;
 import java.util.Objects;
@@ -10,7 +13,11 @@ public final class DataDTO {
   private UUID publicId;
   private String entry;
   private DataType type;
+
+  @JsonDeserialize(using = ApiInstantDeserializer.class)
   Instant createdAt;
+
+  @JsonDeserialize(using = ApiInstantDeserializer.class)
   Instant updatedAt;
 
   public UUID getPublicId() {
