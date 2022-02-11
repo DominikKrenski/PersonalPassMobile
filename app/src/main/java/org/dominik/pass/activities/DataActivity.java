@@ -1,23 +1,25 @@
 package org.dominik.pass.activities;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.os.Bundle;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.android.material.navigation.NavigationView;
 
 import org.dominik.pass.R;
+import org.dominik.pass.fragments.ItemsFragment;
+import org.dominik.pass.fragments.PasswordsFragment;
 import org.dominik.pass.http.client.RetrofitClient;
 import org.dominik.pass.http.repositories.PassRepository;
 import org.dominik.pass.http.service.PassService;
@@ -54,7 +56,7 @@ public class DataActivity extends AppCompatActivity {
     passRepository.setPassService(RetrofitClient.getInstance().createService(PassService.class));
 
     dataViewModel = new ViewModelProvider(this).get(DataViewModel.class);
-    dataViewModel.init(passRepository, EncryptionService.getInstance());
+    dataViewModel.init(passRepository, EncryptionService.getInstance(), AccessService.getInstance());
 
     // pass access data
     try {
@@ -63,7 +65,17 @@ public class DataActivity extends AppCompatActivity {
       Toast.makeText(this, getResources().getString(R.string.missing_access_data), Toast.LENGTH_LONG).show();
     }
 
+    if (savedInstanceState == null) {
+      getSupportFragmentManager()
+        .beginTransaction()
+        .setReorderingAllowed(true)
+        .addToBackStack(null)
+        .add(R.id.data_fragments, ItemsFragment.class, null)
+        .commit();
+    }
+
     menuToolbar = findViewById(R.id.menu_toolbar);
+    menuToolbar.setTitle(getString(R.string.all_items_item));
     setSupportActionBar(menuToolbar);
 
     menuLayout = findViewById(R.id.menu_layout);
@@ -87,19 +99,31 @@ public class DataActivity extends AppCompatActivity {
     menuHeaderUser.setText(currentUser);
 
     navigationView.setNavigationItemSelectedListener(item -> {
-      if (item.getTitle().equals(getString(R.string.addresses_item))) {
-        item.setChecked(true);
-        Log.d(TAG, "Addresses clicked");
+      if (item == navigationView.getCheckedItem())
+        return false;
+
+      item.setChecked(true);
+      int currentItemId = item.getItemId();
+
+      if (currentItemId == R.id.all_items_item) {
+        menuToolbar.setTitle(getString(R.string.all_items_item));
+        displayFragment(ItemsFragment.class);
+      } else if (currentItemId == R.id.passwords_item) {
+        menuToolbar.setTitle(getString(R.string.passwords_item));
+        displayFragment(PasswordsFragment.class);
+      } else if (currentItemId == R.id.addresses_item) {
+        menuToolbar.setTitle(getString(R.string.addresses_item));
+      } else if (currentItemId == R.id.websites_item) {
+        menuToolbar.setTitle(getString(R.string.websites_item));
+      } else if (currentItemId == R.id.notes_item){
+        menuToolbar.setTitle(getString(R.string.notes_item));
+      } else {
+        menuToolbar.setTitle(getString(R.string.settings_item));
       }
 
+      closeNavigation();
       return true;
     });
-  }
-
-  @Override
-  protected void onResume() {
-    super.onResume();
-    dataViewModel.getAllData();
   }
 
   @Override
@@ -108,5 +132,19 @@ public class DataActivity extends AppCompatActivity {
       menuLayout.closeDrawer(GravityCompat.START);
     else
       super.onBackPressed();
+  }
+
+  private void closeNavigation() {
+    if (menuLayout.isDrawerOpen(GravityCompat.START))
+      menuLayout.closeDrawer(GravityCompat.START);
+  }
+
+  private void displayFragment(Class<? extends Fragment> clazz) {
+    getSupportFragmentManager()
+      .beginTransaction()
+      .setReorderingAllowed(true)
+      .addToBackStack(null)
+      .replace(R.id.data_fragments, clazz, null)
+      .commit();
   }
 }
