@@ -7,6 +7,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,9 +30,9 @@ import org.dominik.pass.models.entries.PasswordEntry;
 import org.dominik.pass.models.entries.SiteEntry;
 import org.dominik.pass.viewmodels.DataViewModel;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.UUID;
 
 public class ItemsFragment extends Fragment {
   private static final String TAG = "ITEMS_FRAGMENT";
@@ -76,32 +77,75 @@ public class ItemsFragment extends Fragment {
   private void prepareData(List<DataDTO> dataDto) {
     ObjectMapper mapper = new ObjectMapper();
 
+    HashMap<DataType, List<AllData>> dataMap = new HashMap<>();
+
     dataDto
       .forEach(data -> {
         try {
          switch (data.getType()) {
            case PASSWORD:
              PasswordData passwordData = createPasswordData(data);
-             allData.add(new AllData(passwordData.getPublicId(), passwordData.getPasswordEntry().getEntryTitle(), passwordData.getType()));
+
+             if (dataMap.containsKey(DataType.PASSWORD)) {
+               dataMap.get(DataType.PASSWORD).add(new AllData(passwordData.getPublicId(), passwordData.getPasswordEntry().getEntryTitle(), passwordData.getType()));
+             } else {
+               List<AllData> list = new LinkedList<>();
+               list.add(new AllData(passwordData.getPublicId(), passwordData.getPasswordEntry().getEntryTitle(), passwordData.getType()));
+               dataMap.put(DataType.PASSWORD, list);
+             }
              break;
            case ADDRESS:
              AddressData addressData = createAddressData(data);
-             allData.add(new AllData(addressData.getPublicId(), addressData.getAddressEntry().getEntryTitle(), addressData.getType()));
+
+             if (dataMap.containsKey(DataType.ADDRESS)) {
+               dataMap.get(DataType.ADDRESS).add(new AllData(addressData.getPublicId(), addressData.getAddressEntry().getEntryTitle(), addressData.getType()));
+             } else {
+               List<AllData> list = new LinkedList<>();
+               list.add(new AllData(addressData.getPublicId(), addressData.getAddressEntry().getEntryTitle(), addressData.getType()));
+               dataMap.put(DataType.ADDRESS, list);
+             }
              break;
            case SITE:
              SiteData siteData = createSiteData(data);
-             allData.add(new AllData(siteData.getPublicId(), siteData.getSiteEntry().getEntryTitle(), siteData.getType()));
+
+             if (dataMap.containsKey(DataType.SITE)) {
+               dataMap.get(DataType.SITE).add(new AllData(siteData.getPublicId(), siteData.getSiteEntry().getEntryTitle(), siteData.getType()));
+             } else {
+               List<AllData> list = new LinkedList<>();
+               list.add(new AllData(siteData.getPublicId(), siteData.getSiteEntry().getEntryTitle(), siteData.getType()));
+               dataMap.put(DataType.SITE, list);
+             }
              break;
            case NOTE:
              NoteData noteData = createNoteData(data);
-             allData.add(new AllData(noteData.getPublicId(), noteData.getNoteEntry().getEntryTitle(), noteData.getType()));
+
+             if (dataMap.containsKey(DataType.NOTE)) {
+               dataMap.get(DataType.NOTE).add(new AllData(noteData.getPublicId(), noteData.getNoteEntry().getEntryTitle(), noteData.getType()));
+             } else {
+               List<AllData> list = new LinkedList<>();
+               list.add(new AllData(noteData.getPublicId(), noteData.getNoteEntry().getEntryTitle(), noteData.getType()));
+               dataMap.put(DataType.NOTE, list);
+             }
              break;
          }
+
+         // add all items from every collection to be in specific order
+          if (dataMap.get(DataType.PASSWORD) != null)
+            allData.addAll(dataMap.get(DataType.PASSWORD));
+
+          if (dataMap.get(DataType.ADDRESS) != null)
+            allData.addAll(dataMap.get(DataType.ADDRESS));
+
+          if (dataMap.get(DataType.SITE) != null)
+            allData.addAll(dataMap.get(DataType.SITE));
+
+          if (dataMap.get(DataType.NOTE) != null)
+            allData.addAll(dataMap.get(DataType.NOTE));
+
         } catch (JsonProcessingException ex) {
           ex.printStackTrace();
         }
       });
-
   }
 
   private PasswordData createPasswordData(DataDTO data) throws JsonProcessingException {
