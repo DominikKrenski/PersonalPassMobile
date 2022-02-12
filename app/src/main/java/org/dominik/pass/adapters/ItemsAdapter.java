@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import org.dominik.pass.R;
 import org.dominik.pass.models.wrappers.AllData;
+import org.dominik.pass.viewmodels.DataViewModel;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -22,8 +23,10 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ViewHolder> 
   private static final String TAG = "ITEMS_ADAPTER";
 
   private List<AllData> allData;
+  DataViewModel dataViewModel;
 
-  public ItemsAdapter() {
+  public ItemsAdapter(DataViewModel dataViewModel) {
+    this.dataViewModel = dataViewModel;
     this.allData = new LinkedList<>();
   }
 
@@ -62,6 +65,8 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ViewHolder> 
       case NOTE:
         icon.setBackground(ContextCompat.getDrawable(context, R.drawable.ic_note));
     }
+
+    holder.itemView.setOnClickListener(v -> dataViewModel.passSelectedData(data));
   }
 
   @Override
