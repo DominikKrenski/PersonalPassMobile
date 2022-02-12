@@ -44,6 +44,9 @@
   <string name="openNavDrawer">Otwórz nawigację</string>
   <string name="closeNavDrawer">Zamknij nawigację</string>
 
+  <!-- ITEMS FRAGMENT -->
+  <string name="item_icon">Ikona wskazująca typ danych</string>
+
   <!-- BUTTONS -->
   <string name="create_account_btn">UTWÓRZ MOJE KONTO</string>
   <string name="sign_in_btn">ZALOGUJ SIĘ</string>

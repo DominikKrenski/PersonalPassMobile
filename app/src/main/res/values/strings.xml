@@ -45,6 +45,9 @@
   <string name="openNavDrawer">Open navigation</string>
   <string name="closeNavDrawer">Close navigation</string>
 
+  <!-- ITEMS FRAGMENT -->
+  <string name="item_icon">Icon showing data type</string>
+
   <!-- BUTTONS -->
   <string name="create_account_btn">CREATE MY ACCOUNT</string>
   <string name="sign_in_btn">SING IN INSTEAD</string>
