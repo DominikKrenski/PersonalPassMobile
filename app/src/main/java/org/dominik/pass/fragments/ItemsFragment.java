@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -45,6 +46,10 @@ public class ItemsFragment extends Fragment {
   private View view;
 
   private final List<AllData> allData = new LinkedList<>();
+  private final List<AddressData> addressData = new LinkedList<>();
+  private final List<NoteData> noteData = new LinkedList<>();
+  private final List<PasswordData> passwordData = new LinkedList<>();
+  private final List<SiteData> siteData = new LinkedList<>();
 
   public ItemsFragment() {}
 
@@ -70,7 +75,7 @@ public class ItemsFragment extends Fragment {
     dataViewModel = new ViewModelProvider(requireActivity()).get(DataViewModel.class);
 
     RecyclerView recyclerView = requireActivity().findViewById(R.id.items_recycler);
-    ItemsAdapter itemsAdapter = new ItemsAdapter();
+    ItemsAdapter itemsAdapter = new ItemsAdapter(dataViewModel);
     LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext());
     Drawable border = getContext().getDrawable(R.drawable.item_divider);
     DividerItemDecoration divider = new DividerItemDecoration(recyclerView.getContext(), layoutManager.getOrientation());
@@ -92,58 +97,104 @@ public class ItemsFragment extends Fragment {
           itemsAdapter.replaceData(allData);
         }
       });
+
+    dataViewModel
+      .getSelectedData()
+      .observe(getViewLifecycleOwner(), selectedItem -> {
+        switch (selectedItem.getType()) {
+          case PASSWORD:
+           PasswordData password = passwordData
+             .stream()
+             .filter(p -> p.getPublicId().equals(selectedItem.getPublicId()))
+             .findFirst()
+             .orElseThrow(() -> new RuntimeException("Data with given id could not be found"));
+            Toast.makeText(getContext(), password.toString(), Toast.LENGTH_LONG).show();
+           break;
+          case ADDRESS:
+            AddressData address = addressData
+              .stream()
+              .filter(a -> a.getPublicId().equals(selectedItem.getPublicId()))
+              .findFirst()
+              .orElseThrow(() -> new RuntimeException("Data with given id could not be found"));
+            Toast.makeText(getContext(), address.toString(), Toast.LENGTH_LONG).show();
+            break;
+          case NOTE:
+            NoteData note = noteData
+              .stream()
+              .filter(n -> n.getPublicId().equals(selectedItem.getPublicId()))
+              .findFirst()
+              .orElseThrow(() -> new RuntimeException("Data with given id could not be found"));
+            Toast.makeText(getContext(), note.toString(), Toast.LENGTH_LONG).show();
+            break;
+          case SITE:
+            SiteData site = siteData
+              .stream()
+              .filter(s -> s.getPublicId().equals(selectedItem.getPublicId()))
+              .findFirst()
+              .orElseThrow(() -> new RuntimeException("Data with given id could not be found"));
+            Toast.makeText(getContext(), site.toString(), Toast.LENGTH_LONG).show();
+        }
+      });
   }
 
   private void prepareData(List<DataDTO> dataDto) {
     HashMap<DataType, List<AllData>> dataMap = new HashMap<>();
 
     allData.clear();
+    addressData.clear();
+    noteData.clear();
+    passwordData.clear();
+    siteData.clear();
 
     dataDto
       .forEach(data -> {
         try {
          switch (data.getType()) {
            case PASSWORD:
-             PasswordData passwordData = createPasswordData(data);
+             PasswordData password = createPasswordData(data);
+             passwordData.add(password);
 
              if (dataMap.containsKey(DataType.PASSWORD)) {
-               dataMap.get(DataType.PASSWORD).add(new AllData(passwordData.getPublicId(), passwordData.getPasswordEntry().getEntryTitle(), passwordData.getType()));
+               dataMap.get(DataType.PASSWORD).add(new AllData(password.getPublicId(), password.getPasswordEntry().getEntryTitle(), password.getType()));
              } else {
                List<AllData> list = new LinkedList<>();
-               list.add(new AllData(passwordData.getPublicId(), passwordData.getPasswordEntry().getEntryTitle(), passwordData.getType()));
+               list.add(new AllData(password.getPublicId(), password.getPasswordEntry().getEntryTitle(), password.getType()));
                dataMap.put(DataType.PASSWORD, list);
              }
              break;
            case ADDRESS:
-             AddressData addressData = createAddressData(data);
+             AddressData address = createAddressData(data);
+             addressData.add(address);
 
              if (dataMap.containsKey(DataType.ADDRESS)) {
-               dataMap.get(DataType.ADDRESS).add(new AllData(addressData.getPublicId(), addressData.getAddressEntry().getEntryTitle(), addressData.getType()));
+               dataMap.get(DataType.ADDRESS).add(new AllData(address.getPublicId(), address.getAddressEntry().getEntryTitle(), address.getType()));
              } else {
                List<AllData> list = new LinkedList<>();
-               list.add(new AllData(addressData.getPublicId(), addressData.getAddressEntry().getEntryTitle(), addressData.getType()));
+               list.add(new AllData(address.getPublicId(), address.getAddressEntry().getEntryTitle(), address.getType()));
                dataMap.put(DataType.ADDRESS, list);
              }
              break;
            case SITE:
-             SiteData siteData = createSiteData(data);
+             SiteData site = createSiteData(data);
+             siteData.add(site);
 
              if (dataMap.containsKey(DataType.SITE)) {
-               dataMap.get(DataType.SITE).add(new AllData(siteData.getPublicId(), siteData.getSiteEntry().getEntryTitle(), siteData.getType()));
+               dataMap.get(DataType.SITE).add(new AllData(site.getPublicId(), site.getSiteEntry().getEntryTitle(), site.getType()));
              } else {
                List<AllData> list = new LinkedList<>();
-               list.add(new AllData(siteData.getPublicId(), siteData.getSiteEntry().getEntryTitle(), siteData.getType()));
+               list.add(new AllData(site.getPublicId(), site.getSiteEntry().getEntryTitle(), site.getType()));
                dataMap.put(DataType.SITE, list);
              }
              break;
            case NOTE:
-             NoteData noteData = createNoteData(data);
+             NoteData note = createNoteData(data);
+             noteData.add(note);
 
              if (dataMap.containsKey(DataType.NOTE)) {
-               dataMap.get(DataType.NOTE).add(new AllData(noteData.getPublicId(), noteData.getNoteEntry().getEntryTitle(), noteData.getType()));
+               dataMap.get(DataType.NOTE).add(new AllData(note.getPublicId(), note.getNoteEntry().getEntryTitle(), note.getType()));
              } else {
                List<AllData> list = new LinkedList<>();
-               list.add(new AllData(noteData.getPublicId(), noteData.getNoteEntry().getEntryTitle(), noteData.getType()));
+               list.add(new AllData(note.getPublicId(), note.getNoteEntry().getEntryTitle(), note.getType()));
                dataMap.put(DataType.NOTE, list);
              }
              break;
