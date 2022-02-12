@@ -9,6 +9,8 @@ import androidx.lifecycle.ViewModel;
 import org.dominik.pass.http.dto.DataDTO;
 import org.dominik.pass.http.repositories.PassRepository;
 import org.dominik.pass.models.AccessDataRaw;
+import org.dominik.pass.models.wrappers.AllData;
+import org.dominik.pass.models.wrappers.BaseData;
 import org.dominik.pass.services.AccessService;
 import org.dominik.pass.services.EncryptionService;
 
@@ -38,6 +40,8 @@ public final class DataViewModel extends ViewModel {
   private Disposable accessDataDisposable;
 
   private final MutableLiveData<List<DataDTO>> allData = new MutableLiveData<>();
+  private final MutableLiveData<AllData> selectedData = new MutableLiveData<>();
+  private final MutableLiveData<BaseData> currentData = new MutableLiveData<>();
 
   public void init(PassRepository passRepository, EncryptionService encryptionService, AccessService accessService) {
     this.passRepository = passRepository;
@@ -65,6 +69,22 @@ public final class DataViewModel extends ViewModel {
   }
 
   public LiveData<List<DataDTO>> getAllData() { return allData; }
+
+  public void passSelectedData(AllData selected) {
+    selectedData.setValue(selected);
+  }
+
+  public LiveData<AllData> getSelectedData() {
+    return selectedData;
+  }
+
+  public void passCurrentData(BaseData data) {
+    currentData.setValue(data);
+  }
+
+  public LiveData<BaseData> getCurrentData() {
+    return currentData;
+  }
 
   @Override
   protected void onCleared() {
