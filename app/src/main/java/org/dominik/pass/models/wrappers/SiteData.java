@@ -21,6 +21,13 @@ public final class SiteData extends BaseData {
     this.siteEntry = siteEntry;
   }
 
+  @Override
+  public String toString() {
+    return "SiteData{" +
+      "siteEntry=" + siteEntry +
+      '}';
+  }
+
   public static final class Builder {
     private UUID publicId;
     private DataType type;

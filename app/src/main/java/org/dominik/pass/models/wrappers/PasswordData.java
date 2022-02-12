@@ -21,6 +21,13 @@ public final class PasswordData extends BaseData {
     this.passwordEntry = passwordEntry;
   }
 
+  @Override
+  public String toString() {
+    return "PasswordData{" +
+      "passwordEntry=" + passwordEntry +
+      '}';
+  }
+
   public static final class Builder {
     private UUID publicId;
     private DataType type;

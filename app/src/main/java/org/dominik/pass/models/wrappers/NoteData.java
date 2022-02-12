@@ -21,6 +21,13 @@ public final class NoteData extends BaseData {
     this.noteEntry = noteEntry;
   }
 
+  @Override
+  public String toString() {
+    return "NoteData{" +
+      "noteEntry=" + noteEntry +
+      '}';
+  }
+
   public static final class Builder {
     private UUID publicId;
     private DataType type;
