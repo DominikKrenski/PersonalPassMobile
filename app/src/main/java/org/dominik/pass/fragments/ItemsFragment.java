@@ -1,13 +1,16 @@
 package org.dominik.pass.fragments;
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +20,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.dominik.pass.R;
+import org.dominik.pass.adapters.ItemsAdapter;
 import org.dominik.pass.http.dto.DataDTO;
 import org.dominik.pass.http.enums.DataType;
 import org.dominik.pass.models.wrappers.AddressData;
@@ -49,12 +53,13 @@ public class ItemsFragment extends Fragment {
     super.onCreate(savedInstanceState);
   }
 
+
+
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
                            Bundle savedInstanceState) {
 
     view = inflater.inflate(R.layout.fragment_items, container, false);
-
     return view;
   }
 
@@ -63,21 +68,36 @@ public class ItemsFragment extends Fragment {
     super.onViewCreated(view, savedInstanceState);
 
     dataViewModel = new ViewModelProvider(requireActivity()).get(DataViewModel.class);
-    dataViewModel.fetchAllData();
+
+    RecyclerView recyclerView = requireActivity().findViewById(R.id.items_recycler);
+    ItemsAdapter itemsAdapter = new ItemsAdapter();
+    LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext());
+    Drawable border = getContext().getDrawable(R.drawable.item_divider);
+    DividerItemDecoration divider = new DividerItemDecoration(recyclerView.getContext(), layoutManager.getOrientation());
+    divider.setDrawable(border);
+
+    recyclerView.setAdapter(itemsAdapter);
+    recyclerView.setLayoutManager(layoutManager);
+    recyclerView.addItemDecoration(divider);
+
+    if (savedInstanceState == null)
+      dataViewModel.fetchAllData();
+
     dataViewModel
       .getAllData()
       .observe(getViewLifecycleOwner(), data -> {
         if (data != null) {
           prepareData(data);
           Log.d(TAG, allData.toString());
+          itemsAdapter.replaceData(allData);
         }
       });
   }
 
   private void prepareData(List<DataDTO> dataDto) {
-    ObjectMapper mapper = new ObjectMapper();
-
     HashMap<DataType, List<AllData>> dataMap = new HashMap<>();
+
+    allData.clear();
 
     dataDto
       .forEach(data -> {
@@ -128,24 +148,23 @@ public class ItemsFragment extends Fragment {
              }
              break;
          }
-
-         // add all items from every collection to be in specific order
-          if (dataMap.get(DataType.PASSWORD) != null)
-            allData.addAll(dataMap.get(DataType.PASSWORD));
-
-          if (dataMap.get(DataType.ADDRESS) != null)
-            allData.addAll(dataMap.get(DataType.ADDRESS));
-
-          if (dataMap.get(DataType.SITE) != null)
-            allData.addAll(dataMap.get(DataType.SITE));
-
-          if (dataMap.get(DataType.NOTE) != null)
-            allData.addAll(dataMap.get(DataType.NOTE));
-
         } catch (JsonProcessingException ex) {
           ex.printStackTrace();
         }
       });
+
+    // add all items from every collection to be in specific order
+    if (dataMap.get(DataType.PASSWORD) != null)
+      allData.addAll(dataMap.get(DataType.PASSWORD));
+
+    if (dataMap.get(DataType.ADDRESS) != null)
+      allData.addAll(dataMap.get(DataType.ADDRESS));
+
+    if (dataMap.get(DataType.SITE) != null)
+      allData.addAll(dataMap.get(DataType.SITE));
+
+    if (dataMap.get(DataType.NOTE) != null)
+      allData.addAll(dataMap.get(DataType.NOTE));
   }
 
   private PasswordData createPasswordData(DataDTO data) throws JsonProcessingException {
