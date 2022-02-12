@@ -17,6 +17,8 @@
         <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.21145833333333333" />
         <entry key="app/src/main/res/drawable/ic_navigation_divider.xml" value="0.203" />
         <entry key="app/src/main/res/drawable/ic_settings_black_24dp.xml" value="0.203" />
+        <entry key="app/src/main/res/drawable/item_border.xml" value="0.203" />
+        <entry key="app/src/main/res/drawable/item_divider.xml" value="0.203" />
         <entry key="app/src/main/res/drawable/menu_background_color_state.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/menu_item_background_color_state.xml" value="0.1" />
         <entry key="app/src/main/res/font/anton.xml" value="0.22552083333333334" />
@@ -31,6 +33,8 @@
         <entry key="app/src/main/res/layout/fragment_login.xml" value="0.17889492753623187" />
         <entry key="app/src/main/res/layout/fragment_password.xml" value="0.22" />
         <entry key="app/src/main/res/layout/fragment_passwords.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/item_row.xml" value="0.14470284237726097" />
+        <entry key="app/src/main/res/layout/item_row_1.xml" value="0.1721014492753623" />
         <entry key="app/src/main/res/layout/navigation_header.xml" value="0.1" />
         <entry key="app/src/main/res/layout/onboard_item_container.xml" value="0.18795289855072464" />
         <entry key="app/src/main/res/layout/onboarding_item_container.xml" value="0.1953125" />
